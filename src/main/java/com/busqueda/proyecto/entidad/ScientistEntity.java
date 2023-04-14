@@ -6,9 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.springframework.data.annotation.Id;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,8 +22,9 @@ public class ScientistEntity implements Serializable {
 
 	private static final long serialVersionUID = -4504854026750310724L;
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)	
+	@Column(name="ID_CIENTIFICO")
 	private Long id;
 	
 	@Column(name="ORCID")

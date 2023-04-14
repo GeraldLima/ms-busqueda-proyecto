@@ -27,7 +27,7 @@ public class BusquedaServiceImpl implements BusquedaService {
 	}
 
 	@Override
-	public ScientistEntity getScientistById(Long id) {
+	public ScientistEntity getScientistById(String id) {
 
 		ScientistEntity scientist = scientistRepository.findByOrcid(id);
 		
@@ -43,7 +43,7 @@ public class BusquedaServiceImpl implements BusquedaService {
 	}
 
 	@Override
-	public OrganizationEntity getOrganizationById(Long id) {
+	public OrganizationEntity getOrganizationById(String id) {
 
 		OrganizationEntity organization = organizationRepository.findByNif(id);
 		

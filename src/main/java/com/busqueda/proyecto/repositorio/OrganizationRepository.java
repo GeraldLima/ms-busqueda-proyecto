@@ -10,6 +10,6 @@ import com.busqueda.proyecto.entidad.OrganizationEntity;
 @Repository
 public interface OrganizationRepository extends JpaRepository<OrganizationEntity, Long> {
 
-	@Query("SELECT org FROM OrganizationEntity org WHERE org.nif = :id ")
-	OrganizationEntity findByNif(@Param("id") Long id);
+	@Query("SELECT org FROM OrganizationEntity org WHERE org.nif = :nif ")
+	OrganizationEntity findByNif(@Param("nif") String nif);
 }

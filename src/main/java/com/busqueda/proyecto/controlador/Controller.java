@@ -21,7 +21,7 @@ public class Controller {
 	
 	@GetMapping(value = "/cientifico/{id}")
 	public ResponseEntity<ScientistEntity> getScientistById(
-			@PathVariable (name="id") Long idScientist) {
+			@PathVariable (name="id") String idScientist) {
 		ScientistEntity scientist = service.getScientistById(idScientist);
 		return ResponseEntity.ok().body(scientist);
 	}
@@ -37,7 +37,7 @@ public class Controller {
 	
 	@GetMapping(value = "/organismo/{id}")
 	public ResponseEntity<OrganizationEntity> getOrganizationById(
-			@PathVariable (name="id") Long id) {
+			@PathVariable (name="id") String id) {
 		OrganizationEntity organization = service.getOrganizationById(id);
 		return ResponseEntity.ok().body(organization);
 	}

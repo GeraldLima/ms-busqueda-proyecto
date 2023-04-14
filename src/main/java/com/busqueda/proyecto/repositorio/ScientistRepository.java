@@ -10,6 +10,6 @@ import com.busqueda.proyecto.entidad.ScientistEntity;
 @Repository
 public interface ScientistRepository extends JpaRepository<ScientistEntity, Long> {
 
-	@Query("SELECT sc FROM ScientistEntity sc WHERE sc.orcid = :id ")
-	ScientistEntity findByOrcid(@Param("id") Long id);
+	@Query("SELECT sc FROM ScientistEntity sc WHERE sc.orcid = :orcid ")
+	ScientistEntity findByOrcid(@Param("orcid") String orcid);
 }

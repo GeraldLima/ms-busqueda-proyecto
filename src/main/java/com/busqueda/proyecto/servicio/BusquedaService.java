@@ -7,9 +7,9 @@ public interface BusquedaService {
 
 	Long postScientist(ScientistEntity m);
 	
-	ScientistEntity getScientistById(Long id);
+	ScientistEntity getScientistById(String id);
 	
 	Long postOrganization(OrganizationEntity org);
 	
-	OrganizationEntity getOrganizationById(Long id);
+	OrganizationEntity getOrganizationById(String id);
 }
