@@ -45,7 +45,7 @@ public class BusquedaServiceImpl implements BusquedaService {
 	@Override
 	public OrganizationEntity getOrganizationById(String id) {
 
-		OrganizationEntity organization = organizationRepository.findByNif(id);
+		OrganizationEntity organization = organizationRepository.findByIdOrganization(id);
 		
 		return organization != null? organization : null;
 	}

@@ -24,7 +24,7 @@ public class ScientistEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
-	@Column(name="ID_CIENTIFICO")
+	@Column(name="ID")
 	private Long id;
 	
 	@Column(name="ORCID")
@@ -35,9 +35,6 @@ public class ScientistEntity implements Serializable {
 	
 	@Column(name="EMAIL")
 	private String email;
-	
-	@Column(name="TELEFONO")
-	private Long phone;
 	
 	@Column(name="ESPECIALIDAD")
 	private String speciality;

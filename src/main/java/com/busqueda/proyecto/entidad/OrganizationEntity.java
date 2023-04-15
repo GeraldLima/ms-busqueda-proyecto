@@ -24,11 +24,11 @@ public class OrganizationEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
-	@Column(name="ID_ORGANISMO")
+	@Column(name="ID")
 	private Long id;
 	
-	@Column(name="NIF")
-	private String nif;
+	@Column(name="ID_ORGANISMO")
+	private String idOrganization;
 	
 	@Column(name="NOMBRE")
 	private String name;
@@ -39,8 +39,8 @@ public class OrganizationEntity implements Serializable {
 	@Column(name="LOCALIDAD")
 	private String location;
 	
-	@Column(name="TIPO")
-	private String type;
+	@Column(name="AMBITO")
+	private String area;
 	
 	@Column(name="ACTIVO")
 	private Boolean active;
