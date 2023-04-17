@@ -8,20 +8,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.busqueda.proyecto.entidad.OrganizationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.servicio.BusquedaService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class Controller {
 
 	@Autowired
 	private BusquedaService service;
-	
+
 	@GetMapping(value = "/cientifico/{id}")
 	public ResponseEntity<ScientistEntity> getScientistById(
-			@PathVariable (name="id") String idScientist) {
+			@PathVariable(name = "id") String idScientist) {
 		ScientistEntity scientist = service.getScientistById(idScientist);
 		return ResponseEntity.ok().body(scientist);
 	}
@@ -34,10 +36,10 @@ public class Controller {
 		Long idScientist = service.postScientist(scientist);
 		return ResponseEntity.ok().body(idScientist);
 	}
-	
+
 	@GetMapping(value = "/organismo/{id}")
 	public ResponseEntity<OrganizationEntity> getOrganizationById(
-			@PathVariable (name="id") String id) {
+			@PathVariable(name = "id") String id) {
 		OrganizationEntity organization = service.getOrganizationById(id);
 		return ResponseEntity.ok().body(organization);
 	}
