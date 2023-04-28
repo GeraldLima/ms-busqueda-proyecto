@@ -1,5 +1,7 @@
 package com.busqueda.proyecto.servicio.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +10,7 @@ import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.repositorio.OrganizationRepository;
 import com.busqueda.proyecto.repositorio.ScientistRepository;
 import com.busqueda.proyecto.servicio.BusquedaService;
+import com.gestion.medico.entidad.Medico;
 
 @Service
 public class BusquedaServiceImpl implements BusquedaService {
@@ -32,6 +35,24 @@ public class BusquedaServiceImpl implements BusquedaService {
 		ScientistEntity scientist = scientistRepository.findByOrcid(id);
 		
 		return scientist != null? scientist : null;
+	}	
+
+	@Override
+	public ScientistEntity putScientist(Long idScientist, ScientistEntity sc) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ScientistEntity> getScientists() {
+		List<ScientistEntity> Scientists = scientistRepository.findAll();
+		
+		return Scientists;
+	}
+
+	@Override
+	public Boolean deleteScientist(String orcid) {
+		return (scientistRepository.deleteByOrcid(orcid))? true : false;
 	}
 	
 	@Override
@@ -49,6 +70,5 @@ public class BusquedaServiceImpl implements BusquedaService {
 		
 		return organization != null? organization : null;
 	}
-	
 	
 }
