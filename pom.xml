@@ -11,7 +11,7 @@
 	
 	<groupId>com.busqueda.proyecto</groupId>
 	<artifactId>proyecto</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>ms-busqueda-proyecto</name>
 	<description>Búsqueda de grupo para Proyecto Microservice</description>
 	

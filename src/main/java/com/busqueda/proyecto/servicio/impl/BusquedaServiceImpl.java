@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.busqueda.proyecto.entidad.OrganizationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
+import com.busqueda.proyecto.exception.ProyectSearchException;
 import com.busqueda.proyecto.repositorio.OrganizationRepository;
 import com.busqueda.proyecto.repositorio.ScientistRepository;
 import com.busqueda.proyecto.servicio.BusquedaService;
-import com.gestion.medico.entidad.Medico;
+import com.busqueda.proyecto.setters.ServiceSetters;
 
 @Service
 public class BusquedaServiceImpl implements BusquedaService {
@@ -20,6 +21,9 @@ public class BusquedaServiceImpl implements BusquedaService {
 	
 	@Autowired
 	private OrganizationRepository organizationRepository;
+	
+	@Autowired
+	private ServiceSetters serviceSetter;
 	
 	@Override
 	public Long postScientist(ScientistEntity sc) {
@@ -39,8 +43,16 @@ public class BusquedaServiceImpl implements BusquedaService {
 
 	@Override
 	public ScientistEntity putScientist(Long idScientist, ScientistEntity sc) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if (scientistRepository.findById(idScientist).isEmpty()) {
+			throw new ProyectSearchException("No Scientist found with that id");
+		}
+		
+		ScientistEntity newSc = this.serviceSetter.updateScientistSetter(sc);
+		
+		ScientistEntity scientist = scientistRepository.save(newSc);
+		
+		return scientist;
 	}
 
 	@Override
