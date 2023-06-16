@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.busqueda.proyecto.entidad.OrganizationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
+import com.busqueda.proyecto.entidad.SearchUserEntity;
 
 public interface BusquedaService {
 
@@ -20,4 +21,6 @@ public interface BusquedaService {
 	List<ScientistEntity> getScientists();
 
 	Boolean deleteScientist(String orcid);
+
+	Long postLoginProcess(SearchUserEntity user);
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.busqueda.proyecto.entidad.OrganizationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
+import com.busqueda.proyecto.entidad.SearchUserEntity;
 import com.busqueda.proyecto.exception.ProyectSearchException;
 import com.busqueda.proyecto.repositorio.OrganizationRepository;
 import com.busqueda.proyecto.repositorio.ScientistRepository;
@@ -81,6 +82,12 @@ public class BusquedaServiceImpl implements BusquedaService {
 		OrganizationEntity organization = organizationRepository.findByIdOrganization(id);
 		
 		return organization != null? organization : null;
+	}
+
+	@Override
+	public Long postLoginProcess(SearchUserEntity user) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

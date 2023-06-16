@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.busqueda.proyecto.entidad.OrganizationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
+import com.busqueda.proyecto.entidad.SearchUserEntity;
 import com.busqueda.proyecto.servicio.BusquedaService;
 
 @RestController
@@ -49,7 +50,7 @@ public class Controller {
 		return ResponseEntity.ok().body(scientist);
 	}
 
-	@GetMapping(value = "/medico/all", 
+	@GetMapping(value = "/cientifico/all", 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<ScientistEntity>> getScientists() {
 		return ResponseEntity.ok().body(service.getScientists());
@@ -75,4 +76,13 @@ public class Controller {
 		Long idOrganization = service.postOrganization(organization);
 		return ResponseEntity.ok().body(idOrganization);
 	}
+	
+	@PostMapping(value = "/loginProcess", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<Long> loginProcess(
+			@RequestBody SearchUserEntity user) {
+		Long idUser = service.postLoginProcess(user);
+		return ResponseEntity.ok().body(idUser);
+	}
+	
 }
