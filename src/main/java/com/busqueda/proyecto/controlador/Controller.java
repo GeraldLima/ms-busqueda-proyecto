@@ -31,6 +31,7 @@ public class Controller {
 	public ResponseEntity<ScientistEntity> getScientistById(
 			@PathVariable (name="id") String idScientist) {
 		ScientistEntity scientist = service.getScientistById(idScientist);
+		
 		return ResponseEntity.ok().body(scientist);
 	}
 
@@ -39,6 +40,7 @@ public class Controller {
 	public ResponseEntity<Long> postScientist(
 			@RequestBody ScientistEntity scientist) {
 		Long idScientist = service.postScientist(scientist);
+		
 		return ResponseEntity.ok().body(idScientist);
 	}
 	
@@ -47,17 +49,20 @@ public class Controller {
 	public ResponseEntity<ScientistEntity> putScientist(
 			@PathVariable (name="id") Long idScientist, @RequestBody ScientistEntity sc) {
 		ScientistEntity scientist = service.putScientist(idScientist, sc);
+		
 		return ResponseEntity.ok().body(scientist);
 	}
 
 	@GetMapping(value = "/cientifico/all", 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<ScientistEntity>> getScientists() {
+		
 		return ResponseEntity.ok().body(service.getScientists());
 	}
 
 	@DeleteMapping(value = "/cientifico/{orcid}")
 	public ResponseEntity<Boolean> deleteScientist(@PathVariable String orcid) {
+		
 		return ResponseEntity.ok().body(service.deleteScientist(orcid));
 	}
 	
@@ -66,6 +71,7 @@ public class Controller {
 	public ResponseEntity<OrganizationEntity> getOrganizationById(
 			@PathVariable (name="id") String id) {
 		OrganizationEntity organization = service.getOrganizationById(id);
+		
 		return ResponseEntity.ok().body(organization);
 	}
 
@@ -74,14 +80,16 @@ public class Controller {
 	public ResponseEntity<Long> postOrganization(
 			@RequestBody OrganizationEntity organization) {
 		Long idOrganization = service.postOrganization(organization);
+		
 		return ResponseEntity.ok().body(idOrganization);
 	}
 	
 	@PostMapping(value = "/loginProcess", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<Long> loginProcess(
+	public ResponseEntity<String> loginProcess(
 			@RequestBody SearchUserEntity user) {
-		Long idUser = service.postLoginProcess(user);
+		String idUser = service.postLoginProcess(user);
+		
 		return ResponseEntity.ok().body(idUser);
 	}
 	

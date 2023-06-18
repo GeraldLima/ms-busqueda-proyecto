@@ -32,8 +32,11 @@ public class SearchUserEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
-	@Column(name="UUID_USUARIO")
+	@Column(name="ID")
 	private Long id;
+	
+	@Column(name="UUID_USUARIO")
+	private String uuId;
 	
 	@Column(name="UUID_CORREO")
 	private String uuidEmail;

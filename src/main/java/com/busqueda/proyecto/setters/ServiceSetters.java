@@ -3,6 +3,8 @@ package com.busqueda.proyecto.setters;
 import org.springframework.stereotype.Component;
 
 import com.busqueda.proyecto.entidad.ScientistEntity;
+import com.busqueda.proyecto.entidad.SearchUserEntity;
+import com.busqueda.proyecto.utils.ProjectUtils;
 
 @Component
 public class ServiceSetters {
@@ -21,4 +23,11 @@ public class ServiceSetters {
 		return scNew;
 	}
 
+	public SearchUserEntity postSearchUserSetter(SearchUserEntity user) {
+
+		user.setActive(true);
+		user.setInitLifeDate(ProjectUtils.getLocalDateTimeNow());
+		
+		return user;
+	}
 }

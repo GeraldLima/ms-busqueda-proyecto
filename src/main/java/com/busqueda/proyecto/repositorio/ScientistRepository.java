@@ -17,4 +17,10 @@ public interface ScientistRepository extends JpaRepository<ScientistEntity, Long
 	@Modifying
 	@Query("SELECT sc FROM ScientistEntity sc WHERE sc.orcid = :orcid ")
 	boolean deleteByOrcid(@Param("orcid") String orcid);
+
+	@Query("SELECT sc.orcid FROM ScientistEntity sc "
+			+ "JOIN sc.userUuid user ON user.id = :idUser "
+			+ "WHERE sc.active = TRUE AND user.active = TRUE "
+			+ "AND user.endLifeDate IS NOT NULL ")
+	String findByUuid(@Param("idUser") String idUser);
 }

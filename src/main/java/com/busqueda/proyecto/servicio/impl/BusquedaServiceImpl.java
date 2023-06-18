@@ -2,8 +2,10 @@ package com.busqueda.proyecto.servicio.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.busqueda.proyecto.entidad.OrganizationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
@@ -11,6 +13,7 @@ import com.busqueda.proyecto.entidad.SearchUserEntity;
 import com.busqueda.proyecto.exception.ProyectSearchException;
 import com.busqueda.proyecto.repositorio.OrganizationRepository;
 import com.busqueda.proyecto.repositorio.ScientistRepository;
+import com.busqueda.proyecto.repositorio.UserRepository;
 import com.busqueda.proyecto.servicio.BusquedaService;
 import com.busqueda.proyecto.setters.ServiceSetters;
 
@@ -24,10 +27,22 @@ public class BusquedaServiceImpl implements BusquedaService {
 	private OrganizationRepository organizationRepository;
 	
 	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
 	private ServiceSetters serviceSetter;
 	
+	@Transactional
 	@Override
 	public Long postScientist(ScientistEntity sc) {
+		
+		SearchUserEntity user = new SearchUserEntity();
+		
+		user = serviceSetter.postSearchUserSetter(sc.getUserUuid());
+		
+		user = userRepository.save(user);
+		
+		sc.setUserUuid(user);
 		
 		ScientistEntity scientist = scientistRepository.save(sc);
 		
@@ -85,9 +100,19 @@ public class BusquedaServiceImpl implements BusquedaService {
 	}
 
 	@Override
-	public Long postLoginProcess(SearchUserEntity user) {
-		// TODO Auto-generated method stub
-		return null;
+	public String postLoginProcess(SearchUserEntity user) {
+
+		String idUser = "";
+		
+		idUser = organizationRepository.findByUuid(user.getUuId());
+		
+		if (StringUtils.isEmpty(idUser)) {		
+			idUser = scientistRepository.findByUuid(user.getUuId());
+		}else {
+			throw new ProyectSearchException("No user found with that id: " + user.getUuId());
+		}
+		
+		return idUser;
 	}
 	
 }
