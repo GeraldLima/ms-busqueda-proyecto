@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.busqueda.proyecto.entidad.OrganizationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
@@ -19,6 +20,7 @@ import com.busqueda.proyecto.entidad.SearchUserEntity;
 import com.busqueda.proyecto.servicio.BusquedaService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class Controller {
 
 	@Autowired
@@ -29,7 +31,7 @@ public class Controller {
 //	@Operation(summary = "", method = "GET", 
 //	security = {@SecurityRequirement(name = "user-key")})
 	public ResponseEntity<ScientistEntity> getScientistById(
-			@PathVariable (name="id") String idScientist) {
+			@PathVariable(name = "id") String idScientist) {
 		ScientistEntity scientist = service.getScientistById(idScientist);
 		
 		return ResponseEntity.ok().body(scientist);
@@ -69,7 +71,7 @@ public class Controller {
 	@GetMapping(value = "/organismo/{id}", 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<OrganizationEntity> getOrganizationById(
-			@PathVariable (name="id") String id) {
+			@PathVariable(name = "id") String id) {
 		OrganizationEntity organization = service.getOrganizationById(id);
 		
 		return ResponseEntity.ok().body(organization);
