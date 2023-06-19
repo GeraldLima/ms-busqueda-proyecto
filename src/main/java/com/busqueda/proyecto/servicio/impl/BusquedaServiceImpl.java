@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.busqueda.proyecto.constants.Constants;
 import com.busqueda.proyecto.entidad.OrganizationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.entidad.SearchUserEntity;
@@ -36,13 +37,13 @@ public class BusquedaServiceImpl implements BusquedaService {
 	@Override
 	public Long postScientist(ScientistEntity sc) {
 		
-		SearchUserEntity user = new SearchUserEntity();
-		
-		user = serviceSetter.postSearchUserSetter(sc.getUserUuid());
-		
-		user = userRepository.save(user);
-		
-		sc.setUserUuid(user);
+//		SearchUserEntity user = new SearchUserEntity();
+//		
+//		user = serviceSetter.postSearchUserSetter(sc.getUserUuid());
+//		
+//		user = userRepository.save(user);
+//		
+//		sc.setUserUuid(user);
 		
 		ScientistEntity scientist = scientistRepository.save(sc);
 		
@@ -100,18 +101,29 @@ public class BusquedaServiceImpl implements BusquedaService {
 	}
 
 	@Override
-	public String postLoginProcess(SearchUserEntity user) {
+	public Long postUserUUID(SearchUserEntity user) {
+
+		serviceSetter.postSearchUserSetter(user);
+		
+		SearchUserEntity responseEntity = userRepository.save(user);		
+		
+		return responseEntity.getId();
+	}
+	
+	@Override
+	public String loginProcess(String uuidUser) {
 
 		String idUser = "";
-		
-		idUser = organizationRepository.findByUuid(user.getUuId());
-		
-		if (StringUtils.isEmpty(idUser)) {		
-			idUser = scientistRepository.findByUuid(user.getUuId());
-		}else {
-			throw new ProyectSearchException("No user found with that id: " + user.getUuId());
+
+		if (StringUtils.isNotEmpty(organizationRepository.findByUuid(uuidUser))) {
+			idUser = Constants.ORGANIZATION;
 		}
-		
+		else if (StringUtils.isNotEmpty(scientistRepository.findByUuid(uuidUser))) {
+			idUser = Constants.SCIENTIST;
+		} else {
+			throw new ProyectSearchException("No user found with that id: " + uuidUser);
+		}
+
 		return idUser;
 	}
 	

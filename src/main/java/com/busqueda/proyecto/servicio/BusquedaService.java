@@ -22,5 +22,8 @@ public interface BusquedaService {
 
 	Boolean deleteScientist(String orcid);
 
-	String postLoginProcess(SearchUserEntity user);
+	Long postUserUUID(SearchUserEntity user);
+	
+	String loginProcess(String uuidUser);
+	
 }

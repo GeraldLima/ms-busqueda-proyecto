@@ -66,8 +66,8 @@ public class ProjectEntity implements Serializable {
  	@Column(name = "FEC_ACTUALIZACION")
  	private LocalDateTime updateLife;
 
- 	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ID")
-    private OrganizationEntity organization;
+// 	@ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "ID")
+//    private OrganizationEntity organization;
  	
 }

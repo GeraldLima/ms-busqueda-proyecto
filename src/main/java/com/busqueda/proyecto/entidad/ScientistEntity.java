@@ -35,8 +35,8 @@ public class ScientistEntity implements Serializable {
 	@Column(name="ORCID")
 	private String orcid;
 	
-//	@Column(name="UID_USUARIO")
-//	private Long uidUser;
+	@Column(name="UID_USUARIO")
+	private String userUuid;
 	
 	@Column(name="NOMBRE")
 	private String name;
@@ -50,10 +50,10 @@ public class ScientistEntity implements Serializable {
 	@Column(name="ACTIVO")
 	private Boolean active;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "UID_USUARIO")
-    private SearchUserEntity userUuid;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "UID_USUARIO")
+//    private SearchUserEntity userUuid;
     
-    @OneToMany(mappedBy = "scientist", cascade = CascadeType.ALL)
-    private List<PublicationEntity> publications;
+//    @OneToMany(mappedBy = "scientist", cascade = CascadeType.ALL)
+//    private List<PublicationEntity> publications;
 }

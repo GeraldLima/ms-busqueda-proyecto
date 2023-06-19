@@ -35,8 +35,8 @@ public class OrganizationEntity implements Serializable {
 	@Column(name="ID_ORGANISMO")
 	private String idOrganization;
 	
-//	@Column(name="UID_USUARIO")
-//	private Long uidUser;
+	@Column(name="UID_USUARIO")
+	private String userUuid;
 	
 	@Column(name="NOMBRE")
 	private String name;
@@ -53,10 +53,10 @@ public class OrganizationEntity implements Serializable {
 	@Column(name="ACTIVO")
 	private Boolean active;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "UID_USUARIO")
-    private SearchUserEntity userUuid;
-    
-    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
-    private List<ProjectEntity> projects;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "UID_USUARIO")
+//    private SearchUserEntity userUuid;
+//    
+//    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+//    private List<ProjectEntity> projects;
 }

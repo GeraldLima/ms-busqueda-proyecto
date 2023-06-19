@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -86,13 +87,23 @@ public class Controller {
 		return ResponseEntity.ok().body(idOrganization);
 	}
 	
-	@PostMapping(value = "/loginProcess", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+	@PostMapping(value = "/usuario", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<String> loginProcess(
+	public ResponseEntity<Long> postUser(
 			@RequestBody SearchUserEntity user) {
-		String idUser = service.postLoginProcess(user);
+		Long idUser = service.postUserUUID(user);
 		
 		return ResponseEntity.ok().body(idUser);
 	}
+	
+	@GetMapping(value = "/login" , produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<String> loginProcess(
+			@RequestParam (name="uuidUser", required = true) String uuidUser) {
+		String idUser = service.loginProcess(uuidUser);
+		
+		return ResponseEntity.ok().body(idUser);
+	}
+	
+	
 	
 }
