@@ -18,7 +18,11 @@ import com.busqueda.proyecto.repositorio.UserRepository;
 import com.busqueda.proyecto.servicio.BusquedaService;
 import com.busqueda.proyecto.setters.ServiceSetters;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
+@Transactional
 public class BusquedaServiceImpl implements BusquedaService {
 
 	@Autowired
@@ -33,19 +37,15 @@ public class BusquedaServiceImpl implements BusquedaService {
 	@Autowired
 	private ServiceSetters serviceSetter;
 	
-	@Transactional
+	
 	@Override
 	public Long postScientist(ScientistEntity sc) {
 		
-//		SearchUserEntity user = new SearchUserEntity();
-//		
-//		user = serviceSetter.postSearchUserSetter(sc.getUserUuid());
-//		
-//		user = userRepository.save(user);
-//		
-//		sc.setUserUuid(user);
+		log.debug("Entering postScientist [request]:{} ",  sc);
 		
 		ScientistEntity scientist = scientistRepository.save(sc);
+		
+		log.debug("Leaving postScientist [response]:{} ",  scientist);
 		
 		return scientist.getId();
 	}
@@ -103,11 +103,18 @@ public class BusquedaServiceImpl implements BusquedaService {
 	@Override
 	public Long postUserUUID(SearchUserEntity user) {
 
-		serviceSetter.postSearchUserSetter(user);
+		log.debug("Entering postUserUUID [request]:{} ",  user);
 		
-		SearchUserEntity responseEntity = userRepository.save(user);		
-		
-		return responseEntity.getId();
+		user = serviceSetter.postSearchUserSetter(user);
+		try {
+			SearchUserEntity responseEntity = userRepository.save(user);
+			log.debug("Leaving postUserUUID [response]:{} ",  responseEntity);
+			
+			return responseEntity.getId();
+		} catch (Exception e) {
+			log.error("Error with postUserUUID service ");
+			throw new ProyectSearchException("Error in repository response." + e);
+		}		
 	}
 	
 	@Override
