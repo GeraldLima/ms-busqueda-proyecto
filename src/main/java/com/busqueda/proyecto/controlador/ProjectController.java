@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("api/project")
+//@RequestMapping("api/project")
 public class ProjectController {
 
 	@Autowired
