@@ -58,7 +58,7 @@ public class ProjectEntity implements Serializable {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
  	@Column(name = "FEC_CREACION")
- 	private LocalDateTime initLifeDate; 	
+ 	private LocalDateTime initLifeDate;	
  	
  	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = ProjectUtils.LOCAL_DATE_TIME_PATTERN)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

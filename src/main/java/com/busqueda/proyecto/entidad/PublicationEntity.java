@@ -38,6 +38,15 @@ public class PublicationEntity implements Serializable {
 	@Column(name="ID_REGISTRO")
 	private Long id;
 	
+	@Column(name="TITULO")
+	private String title;
+	
+	@Column(name="ESPECIALIDAD")
+	private String expertise;
+	
+	@Column(name="EXPERIENCIA")
+	private String profExperience;
+	
 	@Column(name="DESCRIPCION")
 	private String description;
 	

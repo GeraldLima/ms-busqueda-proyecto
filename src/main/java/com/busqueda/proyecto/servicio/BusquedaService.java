@@ -6,11 +6,15 @@ import com.busqueda.proyecto.entidad.OrganizationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.entidad.SearchUserEntity;
 
+import dto.GetLoginDTO;
+
 public interface BusquedaService {
 
 	Long postScientist(ScientistEntity m);
 	
-	ScientistEntity getScientistById(String id);
+	ScientistEntity getScientistByOrcid(String orcid);
+	
+	ScientistEntity getScientistById(Long id);
 	
 	Long postOrganization(OrganizationEntity org);
 	
@@ -24,6 +28,6 @@ public interface BusquedaService {
 
 	Long postUserUUID(SearchUserEntity user);
 	
-	String loginProcess(String uuidUser);
+	GetLoginDTO loginProcess(String uuidUser);
 	
 }

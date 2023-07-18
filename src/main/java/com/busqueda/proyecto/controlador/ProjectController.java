@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.busqueda.proyecto.entidad.OrganizationEntity;
@@ -21,6 +19,7 @@ import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.entidad.SearchUserEntity;
 import com.busqueda.proyecto.servicio.BusquedaService;
 
+import dto.GetLoginDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
@@ -32,16 +31,27 @@ public class ProjectController {
 	@Autowired
 	private BusquedaService service;
 	
+	@GetMapping(value = "/cientifico/findBy/{orcid}",
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Find a Scientist by its id", method = "GET")
+	public ResponseEntity<ScientistEntity> getScientistByOrcid(
+			@Parameter(description = "ORCID of a Scientist to be searched") 
+			@PathVariable(name = "orcid") String orcid) {
+		ScientistEntity scientist = service.getScientistByOrcid(orcid);
+		
+		return ResponseEntity.ok().body(scientist);
+	}
+	
 	@GetMapping(value = "/cientifico/{id}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find a Scientist by its id", method = "GET")
 	public ResponseEntity<ScientistEntity> getScientistById(
-			@Parameter(description = "ORCID of a Scientist to be searched") 
-			@PathVariable(name = "id") String idScientist) {
-		ScientistEntity scientist = service.getScientistById(idScientist);
+			@Parameter(description = "ID of a Scientist to be searched") 
+			@PathVariable(name = "id") Long id) {
+		ScientistEntity scientist = service.getScientistById(id);
 		
 		return ResponseEntity.ok().body(scientist);
-	}
+	}	
 	
 	@PostMapping(value = "/cientifico", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -116,12 +126,12 @@ public class ProjectController {
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find an SearchUser by its id and if it exists return type of user", 
 			method = "GET")
-	public ResponseEntity<String> loginProcess(
+	public ResponseEntity<GetLoginDTO> loginProcess(
 			@Parameter(description = "uuidUser of a SearchUser to be searched") 
-			@RequestParam (name="uuidUser", required = true) String uuidUser) {
-		String idUser = service.loginProcess(uuidUser);
+			@PathVariable (name="uuidUser") String uuidUser) {
+		GetLoginDTO responseDto = service.loginProcess(uuidUser);
 		
-		return ResponseEntity.ok().body(idUser);
+		return ResponseEntity.ok().body(responseDto);
 	}
 	
 	

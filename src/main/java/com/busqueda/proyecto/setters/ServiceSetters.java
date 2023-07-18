@@ -17,7 +17,7 @@ public class ServiceSetters {
 		scNew.setOrcid(sc.getOrcid());
 		scNew.setName(sc.getName());
 		scNew.setEmail(sc.getEmail());
-		scNew.setSpeciality(sc.getSpeciality());
+		scNew.setProfession(sc.getProfession());
 		scNew.setActive(sc.getActive());
 		
 		return scNew;

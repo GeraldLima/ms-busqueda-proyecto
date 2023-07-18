@@ -13,7 +13,7 @@ public interface OrganizationRepository extends JpaRepository<OrganizationEntity
 	@Query("SELECT org FROM OrganizationEntity org WHERE org.idOrganization = :id ")
 	OrganizationEntity findByIdOrganization(@Param("id") String id);
 
-	@Query("SELECT org.idOrganization FROM OrganizationEntity org "
+	@Query("SELECT org FROM OrganizationEntity org "
 			+ "WHERE org.userUuid = :idUser AND org.active = TRUE ")
-	String findByUuid(@Param("idUser") String idUser);
+	OrganizationEntity findByUuid(@Param("idUser") String idUser);
 }

@@ -44,8 +44,8 @@ public class ScientistEntity implements Serializable {
 	@Column(name="EMAIL")
 	private String email;
 	
-	@Column(name="ESPECIALIDAD")
-	private String speciality;
+	@Column(name="PROFESION")
+	private String profession;
 	
 	@Column(name="ACTIVO")
 	private Boolean active;

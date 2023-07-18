@@ -1,8 +1,8 @@
 package com.busqueda.proyecto.servicio.impl;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +18,7 @@ import com.busqueda.proyecto.repositorio.UserRepository;
 import com.busqueda.proyecto.servicio.BusquedaService;
 import com.busqueda.proyecto.setters.ServiceSetters;
 
+import dto.GetLoginDTO;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -51,12 +52,20 @@ public class BusquedaServiceImpl implements BusquedaService {
 	}
 
 	@Override
-	public ScientistEntity getScientistById(String id) {
+	public ScientistEntity getScientistByOrcid(String orcid) {
 
-		ScientistEntity scientist = scientistRepository.findByOrcid(id);
+		ScientistEntity scientist = scientistRepository.findByOrcid(orcid);
 		
 		return scientist != null? scientist : null;
-	}	
+	}
+	
+	@Override
+	public ScientistEntity getScientistById(Long id) {
+
+		Optional<ScientistEntity> scientist = scientistRepository.findById(id);
+		
+		return scientist.orElse(null);
+	}
 
 	@Override
 	public ScientistEntity putScientist(Long idScientist, ScientistEntity sc) {
@@ -118,20 +127,29 @@ public class BusquedaServiceImpl implements BusquedaService {
 	}
 	
 	@Override
-	public String loginProcess(String uuidUser) {
+	public GetLoginDTO loginProcess(String uuidUser) {
 
-		String idUser = "";
+		GetLoginDTO responseDto = new GetLoginDTO();
 
-		if (StringUtils.isNotEmpty(organizationRepository.findByUuid(uuidUser))) {
-			idUser = Constants.ORGANIZATION;
+		OrganizationEntity organism = organizationRepository.findByUuid(uuidUser);
+		if (organism != null) {
+			responseDto.setIdUser(organism.getId());
+			responseDto.setUserType(Constants.ORGANIZATION);
 		}
-		else if (StringUtils.isNotEmpty(scientistRepository.findByUuid(uuidUser))) {
-			idUser = Constants.SCIENTIST;
-		} else {
+		else { 
+			ScientistEntity scientist = scientistRepository.findByUuid(uuidUser);
+			if (scientist != null) {
+				responseDto.setIdUser(scientist.getId());
+				responseDto.setUserType(Constants.SCIENTIST);
+			}
+		}
+		
+		//TO FIX
+		if (responseDto.getIdUser() == null){
 			throw new ProyectSearchException("No user found with that id: " + uuidUser);
 		}
 
-		return idUser;
+		return responseDto;
 	}
 	
 }
