@@ -8,7 +8,7 @@ import com.busqueda.proyecto.entidad.SearchUserEntity;
 
 import dto.GetLoginDTO;
 
-public interface BusquedaService {
+public interface UserService {
 
 	Long postScientist(ScientistEntity m);
 	

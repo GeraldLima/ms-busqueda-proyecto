@@ -54,6 +54,6 @@ public class ScientistEntity implements Serializable {
 //    @JoinColumn(name = "UID_USUARIO")
 //    private SearchUserEntity userUuid;
     
-//    @OneToMany(mappedBy = "scientist", cascade = CascadeType.ALL)
-//    private List<PublicationEntity> publications;
+    @OneToMany(mappedBy = "scientist", cascade = CascadeType.ALL)
+    private List<PublicationEntity> publications;
 }

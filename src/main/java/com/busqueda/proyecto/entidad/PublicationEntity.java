@@ -65,8 +65,8 @@ public class PublicationEntity implements Serializable {
  	@Column(name = "FEC_ACTUALIZACION")
  	private LocalDateTime updateLife;
  	
-// 	@ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "ID")
-//    private ScientistEntity scientist;
+ 	@ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ID_CIENTIFICO")
+    private ScientistEntity scientist;
 
 }

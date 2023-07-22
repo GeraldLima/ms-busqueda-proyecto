@@ -15,7 +15,7 @@ import com.busqueda.proyecto.exception.ProyectSearchException;
 import com.busqueda.proyecto.repositorio.OrganizationRepository;
 import com.busqueda.proyecto.repositorio.ScientistRepository;
 import com.busqueda.proyecto.repositorio.UserRepository;
-import com.busqueda.proyecto.servicio.BusquedaService;
+import com.busqueda.proyecto.servicio.UserService;
 import com.busqueda.proyecto.setters.ServiceSetters;
 
 import dto.GetLoginDTO;
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 @Transactional
-public class BusquedaServiceImpl implements BusquedaService {
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private ScientistRepository scientistRepository;
@@ -83,14 +83,27 @@ public class BusquedaServiceImpl implements BusquedaService {
 
 	@Override
 	public List<ScientistEntity> getScientists() {
-		List<ScientistEntity> Scientists = scientistRepository.findAll();
 		
-		return Scientists;
+		List<ScientistEntity> scientists = scientistRepository.findAll();
+		
+		return scientists;
 	}
 
 	@Override
 	public Boolean deleteScientist(String orcid) {
-		return (scientistRepository.deleteByOrcid(orcid))? true : false;
+		
+		Boolean deleted = false;
+		
+		ScientistEntity scientist = scientistRepository.findByOrcid(orcid);
+		
+		if (scientist.getId() != null) {
+			scientist.setActive(false);
+			scientistRepository.save(scientist);
+			deleted = true;
+		}
+		//return (scientistRepository.deleteByOrcid(orcid))? true : false;
+		
+		return deleted;
 	}
 	
 	@Override

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.busqueda.proyecto.entidad.OrganizationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.entidad.SearchUserEntity;
-import com.busqueda.proyecto.servicio.BusquedaService;
+import com.busqueda.proyecto.servicio.UserService;
 
 import dto.GetLoginDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,10 +26,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 //@RequestMapping("api/project")
-public class ProjectController {
+public class UserController {
 
 	@Autowired
-	private BusquedaService service;
+	private UserService service;
 	
 	@GetMapping(value = "/cientifico/findBy/{orcid}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
