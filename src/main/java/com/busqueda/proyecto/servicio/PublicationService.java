@@ -12,7 +12,7 @@ public interface PublicationService {
 
 	PublicationEntity putPublication(Long idPublication, PublicationEntity pub);
 
-	List<PublicationEntity> getPublications(Long idScientist);
+	List<PublicationEntity> getPublications(String idScientist);
 
 	Boolean deletePublication(Long id);
 

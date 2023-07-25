@@ -35,8 +35,11 @@ public class PublicationEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
-	@Column(name="ID_REGISTRO")
+	@Column(name="ID_PUBLICACION")
 	private Long id;
+	
+	@Column(name="ID_CIENTIFICO")
+	private String idScientist;
 	
 	@Column(name="TITULO")
 	private String title;
@@ -65,8 +68,8 @@ public class PublicationEntity implements Serializable {
  	@Column(name = "FEC_ACTUALIZACION")
  	private LocalDateTime updateLife;
  	
- 	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ID_CIENTIFICO")
-    private ScientistEntity scientist;
+// 	@ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "ID_CIENTIFICO")
+//    private ScientistEntity scientist;
 
 }

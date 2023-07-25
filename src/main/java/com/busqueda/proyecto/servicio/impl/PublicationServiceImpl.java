@@ -76,7 +76,7 @@ public class PublicationServiceImpl implements PublicationService {
 	}
 
 	@Override
-	public List<PublicationEntity> getPublications(Long idScientist) {
+	public List<PublicationEntity> getPublications(String idScientist) {
 
 		List<PublicationEntity> publications = publicationRepository.findPublicationsByIdScientist(idScientist);
 		

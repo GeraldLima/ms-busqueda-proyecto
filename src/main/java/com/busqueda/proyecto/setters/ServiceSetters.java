@@ -37,6 +37,7 @@ public class ServiceSetters {
 		publication.setActive(true);
 		publication.setInitLifeDate(ProjectUtils.getLocalDateTimeNow());
 		
+		
 		return publication;
 	}
 

@@ -57,19 +57,21 @@ public class PublicationController {
 		return ResponseEntity.ok().body(publication);
 	}
 
-	@GetMapping(value = "/publicacion/all", 
+	@GetMapping(value = "/publicacion/all/{idCientifico}", 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
-	@Operation(summary = "Find all Publications", method = "GET")
-	public ResponseEntity<List<PublicationEntity>> getPublications() {
+	@Operation(summary = "Find all Publications by idScientist", method = "GET")
+	public ResponseEntity<List<PublicationEntity>> getPublications(
+			@Parameter(description = "id of a Scientist to be searched") 
+			@PathVariable (name="idCientifico") String idScientist) {
 		
-		return ResponseEntity.ok().body(service.getPublications());
+		return ResponseEntity.ok().body(service.getPublications(idScientist));
 	}
 
 	@DeleteMapping(value = "/publicacion/{id}")
 	@Operation(summary = "Delete a Publication by its id", method = "DELETE")
 	public ResponseEntity<Boolean> deletePublication(
-			@Parameter(description = "orcid of a Publication to be deleted") 
-			@PathVariable String id) {
+			@Parameter(description = "id of a Publication to be deleted") 
+			@PathVariable Long id) {
 		
 		return ResponseEntity.ok().body(service.deletePublication(id));
 	}
