@@ -16,15 +16,21 @@ public interface UserService {
 	
 	ScientistEntity getScientistById(Long id);
 	
-	Long postOrganization(OrganizationEntity org);
-	
-	OrganizationEntity getOrganizationById(String id);
-
 	ScientistEntity putScientist(Long idScientist, ScientistEntity sc);
 
 	List<ScientistEntity> getScientists();
 
 	Boolean deleteScientist(String orcid);
+	
+	Long postOrganization(OrganizationEntity org);
+	
+	OrganizationEntity getOrganizationById(String id);
+
+	OrganizationEntity putOrganization(Long idOrganization, OrganizationEntity org);
+
+	List<OrganizationEntity> getOrganizations();
+
+	Boolean deleteOrganization(String idOrganization);
 
 	Long postUserUUID(SearchUserEntity user);
 	

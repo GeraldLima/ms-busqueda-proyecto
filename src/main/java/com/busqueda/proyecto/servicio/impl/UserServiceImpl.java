@@ -92,8 +92,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Boolean deleteScientist(String orcid) {
 		
-		Boolean deleted = false;
-		
+		Boolean deleted = false;		
 		ScientistEntity scientist = scientistRepository.findByOrcid(orcid);
 		
 		if (scientist.getId() != null) {
@@ -120,6 +119,44 @@ public class UserServiceImpl implements UserService {
 		OrganizationEntity organization = organizationRepository.findByIdOrganization(id);
 		
 		return organization != null? organization : null;
+	}
+	
+	@Override
+	public OrganizationEntity putOrganization(Long idOrganization, OrganizationEntity org) {
+		
+		if (organizationRepository.findById(idOrganization).isEmpty()) {
+			throw new ProyectSearchException("No Organization found with that id");
+		}
+		
+		OrganizationEntity newOrg = this.serviceSetter.updateOrganizationSetter(org);
+		
+		OrganizationEntity organization = organizationRepository.save(newOrg);
+		
+		return organization;
+	}
+
+	@Override
+	public List<OrganizationEntity> getOrganizations() {
+		
+		List<OrganizationEntity> orgs = organizationRepository.findAll();
+		
+		return orgs;
+	}
+
+	@Override
+	public Boolean deleteOrganization(String idOrganization) {
+		
+		Boolean deleted = false;		
+		OrganizationEntity org = organizationRepository.findByIdOrganization(idOrganization);
+		
+		if (org.getId() != null) {
+			org.setActive(false);
+			organizationRepository.save(org);
+			deleted = true;
+		}
+		//return (organizaionRepository.deleteByOrcid(orcid))? true : false;
+		
+		return deleted;
 	}
 
 	@Override

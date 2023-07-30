@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.busqueda.proyecto.entidad.ProjectEntity;
 import com.busqueda.proyecto.entidad.PublicationEntity;
-import com.busqueda.proyecto.entidad.ScientistEntity;
-import com.busqueda.proyecto.entidad.SearchUserEntity;
 import com.busqueda.proyecto.exception.ProyectSearchException;
+import com.busqueda.proyecto.repositorio.OrganizationRepository;
+import com.busqueda.proyecto.repositorio.ProjectRepository;
 import com.busqueda.proyecto.repositorio.PublicationRepository;
 import com.busqueda.proyecto.repositorio.ScientistRepository;
 import com.busqueda.proyecto.servicio.PublicationService;
@@ -28,6 +29,12 @@ public class PublicationServiceImpl implements PublicationService {
 
 	@Autowired
 	private ScientistRepository scientistRepository;
+	
+	@Autowired
+	private ProjectRepository projectRepository;
+	
+	@Autowired
+	private OrganizationRepository organizationRepository;
 	
 	@Autowired
 	private ServiceSetters serviceSetter;
@@ -65,7 +72,7 @@ public class PublicationServiceImpl implements PublicationService {
 	public PublicationEntity putPublication(Long idPublication, PublicationEntity pub) {
 
 		if (publicationRepository.findById(idPublication).isEmpty()) {
-			throw new ProyectSearchException("No Scientist found with that id");
+			throw new ProyectSearchException("No Publication was found with that id");
 		}
 		
 		PublicationEntity newPub = serviceSetter.updatePublicationSetter(pub);
@@ -96,6 +103,74 @@ public class PublicationServiceImpl implements PublicationService {
 			deleted = true;
 		}
 		//return (scientistRepository.deleteByOrcid(orcid))? true : false;
+		
+		return deleted;
+	}
+
+	@Override
+	public ProjectEntity getProjectById(Long id) {
+
+		Optional<ProjectEntity> project = projectRepository.findProjectById(id);
+		
+		return project.orElse(null);
+	}
+
+	@Override
+	public Long postProject(ProjectEntity project) {
+
+		log.debug("Entering postProject [request]:{} ",  project);
+		
+		project = serviceSetter.postProjectSetter(project);
+		//TODO id of organization
+//		Optional<OrganizationEntity> org = organizationRepository.findById(project.getIdOrganization());
+//		project.setOrganization(org.get());
+		
+		try {
+			ProjectEntity responseEntity = projectRepository.save(project);
+			log.debug("Leaving postProject [response]:{} ",  responseEntity);
+			
+			return responseEntity.getId();
+		} catch (Exception e) {
+			log.error("Error with postProject service ");
+			throw new ProyectSearchException("Error in repository response." + e);
+		}
+	}
+
+	@Override
+	public ProjectEntity putProject(Long idProject, ProjectEntity proj) {
+		
+		if (projectRepository.findById(idProject).isEmpty()) {
+			throw new ProyectSearchException("No Project was found with that id");
+		}
+		
+		ProjectEntity newProj = serviceSetter.updateProjectSetter(proj);
+		
+		ProjectEntity project = projectRepository.save(newProj);
+		
+		return project;
+	}
+
+	@Override
+	public List<ProjectEntity> getProjects(String idOrganization) {
+
+		List<ProjectEntity> projects = projectRepository.findProjectsByIdOrganization(idOrganization);
+		
+		return projects;
+	}
+
+	@Override
+	public Boolean deleteProject(Long id) {
+
+		Boolean deleted = false;
+		
+		Optional<ProjectEntity> project = projectRepository.findProjectById(id);
+		
+		if (project.get().getId() != null) {
+			project.get().setActive(false);
+			projectRepository.save(project.get());
+			deleted = true;
+		}
+		//return (organizationRepository.deleteByIdOrganization(idOrg))? true : false;
 		
 		return deleted;
 	}

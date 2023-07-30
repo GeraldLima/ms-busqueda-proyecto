@@ -112,6 +112,35 @@ public class UserController {
 		return ResponseEntity.ok().body(idOrganization);
 	}
 	
+	@PutMapping(value = "/organismo/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Update a Organization by its id and a body request", method = "PUT")
+	public ResponseEntity<OrganizationEntity> putOrganization(
+			@Parameter(description = "orcid of a Organization to be updated") 
+			@PathVariable (name="id") Long idOrganization, 
+			@RequestBody OrganizationEntity org) {
+		OrganizationEntity organization = service.putOrganization(idOrganization, org);
+		
+		return ResponseEntity.ok().body(organization);
+	}
+
+	@GetMapping(value = "/organismo/all", 
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Find all Organizations", method = "GET")
+	public ResponseEntity<List<OrganizationEntity>> getOrganizations() {
+		
+		return ResponseEntity.ok().body(service.getOrganizations());
+	}
+
+	@DeleteMapping(value = "/organismo/{idOrganization}")
+	@Operation(summary = "Delete a Organization by its id", method = "DELETE")
+	public ResponseEntity<Boolean> deleteOrganization(
+			@Parameter(description = "orcid of a Organization to be deleted") 
+			@PathVariable String idOrganization) {
+		
+		return ResponseEntity.ok().body(service.deleteOrganization(idOrganization));
+	}
+	
 	@PostMapping(value = "/usuario", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Insert a new SearchUser with a body request", method = "POST")

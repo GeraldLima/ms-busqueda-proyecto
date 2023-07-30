@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.busqueda.proyecto.entidad.ProjectEntity;
 import com.busqueda.proyecto.entidad.PublicationEntity;
 import com.busqueda.proyecto.servicio.PublicationService;
 
@@ -20,6 +22,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class PublicationController {
 
 	@Autowired
@@ -74,6 +77,58 @@ public class PublicationController {
 			@PathVariable Long id) {
 		
 		return ResponseEntity.ok().body(service.deletePublication(id));
+	}
+	
+	@GetMapping(value = "/proyecto/{id}",
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Find a Project by its id", method = "GET")
+	public ResponseEntity<ProjectEntity> getProjectById(
+			@Parameter(description = "ID of a Project to be searched") 
+			@PathVariable(name = "id") Long id) {
+		ProjectEntity project = service.getProjectById(id);
+		
+		return ResponseEntity.ok().body(project);
+	}	
+	
+	@PostMapping(value = "/proyecto", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Insert a new Project with a body request", method = "POST")
+	public ResponseEntity<Long> postProject(
+			@RequestBody ProjectEntity project) {
+		Long idProject = service.postProject(project);
+		
+		return ResponseEntity.ok().body(idProject);
+	}
+	
+	@PutMapping(value = "/proyecto/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Update a Project by its id and a body request", method = "PUT")
+	public ResponseEntity<ProjectEntity> putProject(
+			@Parameter(description = "orcid of a Project to be updated") 
+			@PathVariable (name="id") Long idProject, 
+			@RequestBody ProjectEntity proj) {
+		ProjectEntity project = service.putProject(idProject, proj);
+		
+		return ResponseEntity.ok().body(project);
+	}
+
+	@GetMapping(value = "/proyecto/all/{idOrganismo}", 
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Find all Projects by idOrganization", method = "GET")
+	public ResponseEntity<List<ProjectEntity>> getProjects(
+			@Parameter(description = "id of a Organization to be searched") 
+			@PathVariable (name="idOrganismo") String idOrganization) {
+		
+		return ResponseEntity.ok().body(service.getProjects(idOrganization));
+	}
+
+	@DeleteMapping(value = "/proyecto/{id}")
+	@Operation(summary = "Delete a Project by its id", method = "DELETE")
+	public ResponseEntity<Boolean> deleteProject(
+			@Parameter(description = "id of a Project to be deleted") 
+			@PathVariable Long id) {
+		
+		return ResponseEntity.ok().body(service.deleteProject(id));
 	}
 	
 }

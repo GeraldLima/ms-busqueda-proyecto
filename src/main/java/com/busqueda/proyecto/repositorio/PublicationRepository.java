@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.busqueda.proyecto.entidad.PublicationEntity;
 
 @Repository
-public interface PublicationRepository  extends JpaRepository<PublicationEntity, Long> {
+public interface PublicationRepository extends JpaRepository<PublicationEntity, Long> {
 
 	@Query("SELECT pub FROM PublicationEntity pub "
 			+ "WHERE pub.id = :idPublication AND pub.active = TRUE ")

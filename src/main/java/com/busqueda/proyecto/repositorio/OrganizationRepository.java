@@ -10,7 +10,8 @@ import com.busqueda.proyecto.entidad.OrganizationEntity;
 @Repository
 public interface OrganizationRepository extends JpaRepository<OrganizationEntity, Long> {
 
-	@Query("SELECT org FROM OrganizationEntity org WHERE org.idOrganization = :id ")
+	@Query("SELECT org FROM OrganizationEntity org WHERE org.idOrganization = :id "
+			+ "AND org.active = TRUE ")
 	OrganizationEntity findByIdOrganization(@Param("id") String id);
 
 	@Query("SELECT org FROM OrganizationEntity org "
