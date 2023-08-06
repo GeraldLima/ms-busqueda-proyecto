@@ -131,6 +131,17 @@ public class UserController {
 		
 		return ResponseEntity.ok().body(service.getOrganizations());
 	}
+	
+	@GetMapping(value = "/organismo/findBy/{nameOrg}",
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Find Organizations by name", method = "GET")
+	public ResponseEntity<List<OrganizationEntity>> getOrganizationsByName(
+			@Parameter(description = "Full or partial name of an Organization to be searched") 
+			@PathVariable(name = "nameOrg") String nameOrg) {
+		List<OrganizationEntity> listOrgs = service.getOrganizationsByName(nameOrg);
+		
+		return ResponseEntity.ok().body(listOrgs);
+	}
 
 	@DeleteMapping(value = "/organismo/{idOrganization}")
 	@Operation(summary = "Delete a Organization by its id", method = "DELETE")

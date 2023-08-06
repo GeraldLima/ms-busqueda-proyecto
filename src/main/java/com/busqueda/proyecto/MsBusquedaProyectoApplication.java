@@ -32,7 +32,7 @@ public class MsBusquedaProyectoApplication {
 				
 		        registry.addMapping("/**")
 		                .allowedOrigins("http://localhost:4200")
-		                .allowedMethods("GET", "POST", "PUT")
+		                .allowedMethods("GET", "POST", "PUT", "DELETE")
 		                .maxAge(3600);
 			}
 		};

@@ -35,5 +35,7 @@ public interface UserService {
 	Long postUserUUID(SearchUserEntity user);
 	
 	GetLoginDTO loginProcess(String uuidUser);
+
+	List<OrganizationEntity> getOrganizationsByName(String nameOrg);
 	
 }

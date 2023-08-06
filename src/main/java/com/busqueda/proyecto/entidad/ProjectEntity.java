@@ -1,6 +1,7 @@
 package com.busqueda.proyecto.entidad;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -49,7 +50,7 @@ public class ProjectEntity implements Serializable {
 	private Integer capacity;
 	
 	@Column(name="DURACION")
-	private LocalDate duration;
+	private String duration;
 	
 	@Column(name="ACTIVO")
 	private Boolean active;

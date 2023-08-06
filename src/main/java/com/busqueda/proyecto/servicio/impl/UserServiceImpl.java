@@ -1,5 +1,6 @@
 package com.busqueda.proyecto.servicio.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,11 +71,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ScientistEntity putScientist(Long idScientist, ScientistEntity sc) {
 		
-		if (scientistRepository.findById(idScientist).isEmpty()) {
+		Optional<ScientistEntity> oldScientist = Optional.of(scientistRepository.findById(idScientist)
+				.orElse(null));
+		
+		if (oldScientist.isEmpty()) {
 			throw new ProyectSearchException("No Scientist found with that id");
 		}
 		
-		ScientistEntity newSc = this.serviceSetter.updateScientistSetter(sc);
+		ScientistEntity newSc = this.serviceSetter.updateScientistSetter(oldScientist.get(), sc);
 		
 		ScientistEntity scientist = scientistRepository.save(newSc);
 		
@@ -95,11 +99,14 @@ public class UserServiceImpl implements UserService {
 		Boolean deleted = false;		
 		ScientistEntity scientist = scientistRepository.findByOrcid(orcid);
 		
-		if (scientist.getId() != null) {
-			scientist.setActive(false);
-			scientistRepository.save(scientist);
-			deleted = true;
+		if (scientist == null) {
+			throw new ProyectSearchException("No Scientist found with that id");
 		}
+		
+		scientist.setActive(false);
+		scientistRepository.save(scientist);
+		deleted = true;
+		
 		//return (scientistRepository.deleteByOrcid(orcid))? true : false;
 		
 		return deleted;
@@ -124,11 +131,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public OrganizationEntity putOrganization(Long idOrganization, OrganizationEntity org) {
 		
-		if (organizationRepository.findById(idOrganization).isEmpty()) {
+		Optional<OrganizationEntity> oldOrganization = Optional.of(organizationRepository.findById(idOrganization)
+				.orElse(null));
+		
+		if (oldOrganization.isEmpty()) {
 			throw new ProyectSearchException("No Organization found with that id");
 		}
 		
-		OrganizationEntity newOrg = this.serviceSetter.updateOrganizationSetter(org);
+		OrganizationEntity newOrg = this.serviceSetter.updateOrganizationSetter(oldOrganization.get(), org);
 		
 		OrganizationEntity organization = organizationRepository.save(newOrg);
 		
@@ -144,16 +154,35 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public List<OrganizationEntity> getOrganizationsByName(String nameOrg) {
+	
+		log.debug("Entering getOrganizationsByName [request]:{} ",  nameOrg);
+		
+		List<OrganizationEntity> listOrgs = new ArrayList<>();
+		try {
+			listOrgs = organizationRepository.findOrganizationsByName(nameOrg);
+			log.debug("Leaving getOrganizationsByName [response]:{} ");
+			
+			return listOrgs;
+		} catch (Exception e) {
+			log.error("Error with findOrganizationsByName service ");
+			throw new ProyectSearchException("Error in repository response." + e);
+		}
+	}
+	
+	@Override
 	public Boolean deleteOrganization(String idOrganization) {
 		
 		Boolean deleted = false;		
 		OrganizationEntity org = organizationRepository.findByIdOrganization(idOrganization);
 		
-		if (org.getId() != null) {
-			org.setActive(false);
-			organizationRepository.save(org);
-			deleted = true;
+		if (org == null) {
+			throw new ProyectSearchException("No Organization found with that id");
 		}
+		
+		org.setActive(false);
+		organizationRepository.save(org);
+		deleted = true;
 		//return (organizaionRepository.deleteByOrcid(orcid))? true : false;
 		
 		return deleted;

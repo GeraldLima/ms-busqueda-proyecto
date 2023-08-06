@@ -18,18 +18,16 @@ public class ServiceSetters {
 
 	private Random random;
 	
-	public ScientistEntity updateScientistSetter(ScientistEntity sc) {
-
-		ScientistEntity scNew = new ScientistEntity();
+	public ScientistEntity updateScientistSetter(ScientistEntity old, ScientistEntity sc) {
 		
-		scNew.setId(sc.getId());
-//		scNew.setOrcid(sc.getOrcid());
-		scNew.setName(sc.getName());
-		scNew.setEmail(sc.getEmail());
-		scNew.setProfession(sc.getProfession());
-		scNew.setActive(sc.getActive());
+//		old.setId(sc.getId());
+//		old.setOrcid(sc.getOrcid());
+		old.setName(sc.getName());
+		old.setEmail(sc.getEmail());
+		old.setProfession(sc.getProfession());
+//		old.setActive(sc.getActive());
 		
-		return scNew;
+		return old;
 	}
 
 	public SearchUserEntity postSearchUserSetter(SearchUserEntity user) {
@@ -50,35 +48,32 @@ public class ServiceSetters {
 		return publication;
 	}
 
-	public PublicationEntity updatePublicationSetter(PublicationEntity pub) {
+	public PublicationEntity updatePublicationSetter(PublicationEntity old, PublicationEntity pub) {
 
-		PublicationEntity newPub = new PublicationEntity();
+//		old.setId(pub.getId());
+		old.setTitle(pub.getTitle());
+		old.setExpertise(pub.getExpertise());
+		old.setProfExperience(pub.getProfExperience());
+		old.setDescription(pub.getDescription());
+//		old.setActive(pub.getActive());
+		old.setUpdateLife(ProjectUtils.getLocalDateTimeNow());
 		
-		newPub.setId(pub.getId());
-		newPub.setTitle(pub.getTitle());
-		newPub.setExpertise(pub.getExpertise());
-		newPub.setProfExperience(pub.getProfExperience());
-		newPub.setDescription(pub.getDescription());
-		newPub.setActive(pub.getActive());
-		newPub.setUpdateLife(ProjectUtils.getLocalDateTimeNow());
-		
-		return newPub;
+		return old;
 	}
 
-	public OrganizationEntity updateOrganizationSetter(OrganizationEntity org) {
+	public OrganizationEntity updateOrganizationSetter(OrganizationEntity old, OrganizationEntity org) {
 
-		OrganizationEntity newOrg = new OrganizationEntity();
 		
-		newOrg.setId(org.getId());
-//		newOrg.setIdOrganization(org.getIdOrganization());
-//		newOrg.setUserUuid(org.getUserUuid());
-		newOrg.setName(org.getName());
-		newOrg.setEmail(org.getEmail());
-		newOrg.setLocation(org.getLocation());
-		newOrg.setArea(org.getArea());
-		newOrg.setActive(org.getActive());
+//		old.setId(org.getId());
+//		old.setIdOrganization(org.getIdOrganization());
+//		old.setUserUuid(org.getUserUuid());
+		old.setName(org.getName());
+		old.setEmail(org.getEmail());
+		old.setLocation(org.getLocation());
+		old.setArea(org.getArea());
+//		old.setActive(org.getActive());
 		
-		return newOrg;
+		return old;
 	}
 
 	public ProjectEntity postProjectSetter(ProjectEntity project) {
@@ -90,18 +85,17 @@ public class ServiceSetters {
 		return project;
 	}
 
-	public ProjectEntity updateProjectSetter(ProjectEntity proj) {
+	public ProjectEntity updateProjectSetter(ProjectEntity old, ProjectEntity proj) {
 
-		ProjectEntity newProj = new ProjectEntity();
-		newProj.setId(proj.getId());
-		newProj.setTitle(proj.getTitle());
-		newProj.setDescription(proj.getDescription());
-		newProj.setCapacity(proj.getCapacity());
-		newProj.setDuration(proj.getDuration());
-		newProj.setActive(proj.getActive());
-		newProj.setUpdateLife(ProjectUtils.getLocalDateTimeNow());
+//		old.setId(proj.getId());
+		old.setTitle(proj.getTitle());
+		old.setDescription(proj.getDescription());
+		old.setCapacity(proj.getCapacity());
+		old.setDuration(proj.getDuration());
+//		old.setActive(proj.getActive());
+		old.setUpdateLife(ProjectUtils.getLocalDateTimeNow());
 		
-		return newProj;
+		return old;
 	}
 	
 	protected Integer getRandomInteger() {

@@ -1,5 +1,7 @@
 package com.busqueda.proyecto.repositorio;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +19,9 @@ public interface OrganizationRepository extends JpaRepository<OrganizationEntity
 	@Query("SELECT org FROM OrganizationEntity org "
 			+ "WHERE org.userUuid = :idUser AND org.active = TRUE ")
 	OrganizationEntity findByUuid(@Param("idUser") String idUser);
+	
+	@Query("SELECT org FROM OrganizationEntity org "
+			+ "WHERE UPPER(org.name) LIKE CONCAT('%', UPPER(:nameOrg), '%') "
+			+ "AND org.active = TRUE ")
+	List<OrganizationEntity> findOrganizationsByName(@Param("nameOrg") String nameOrg);
 }

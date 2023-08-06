@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.busqueda.proyecto.entidad.OrganizationEntity;
 import com.busqueda.proyecto.entidad.ProjectEntity;
 import com.busqueda.proyecto.entidad.PublicationEntity;
+import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.exception.ProyectSearchException;
 import com.busqueda.proyecto.repositorio.OrganizationRepository;
 import com.busqueda.proyecto.repositorio.ProjectRepository;
@@ -42,22 +44,28 @@ public class PublicationServiceImpl implements PublicationService {
 	@Override
 	public PublicationEntity getPublicationById(Long id) {
 
-		Optional<PublicationEntity> publication = publicationRepository.findPublicationById(id);
+		log.debug("Entering getPublicationById [id]:{} ",  id);
 		
-		return publication.orElse(null);
+		Optional<PublicationEntity> publication = Optional.of(publicationRepository.findPublicationById(id)
+				.orElseThrow());
+		
+		log.debug("Leaving getPublicationById [response]:{} ",  publication);
+		
+		return publication.get();
 	}
 
 	@Override
 	public Long postPublication(PublicationEntity publication) {
 		
 		log.debug("Entering postPublication [request]:{} ",  publication);
-		
-		publication = serviceSetter.postPublicationSetter(publication);
-		//TODO id of scientist
-//		Optional<ScientistEntity> scientist = scientistRepository.findById(publication.getIdScientist());
-//		publication.setScientist(scientist.get());
+
+		ScientistEntity scientist = scientistRepository.findByOrcid(publication.getIdScientist());
+		if (scientist == null) {
+			throw new ProyectSearchException("The current user is deactivated");
+		}
 		
 		try {
+			publication = serviceSetter.postPublicationSetter(publication);
 			PublicationEntity responseEntity = publicationRepository.save(publication);
 			log.debug("Leaving postPublication [response]:{} ",  responseEntity);
 			
@@ -71,11 +79,14 @@ public class PublicationServiceImpl implements PublicationService {
 	@Override
 	public PublicationEntity putPublication(Long idPublication, PublicationEntity pub) {
 
-		if (publicationRepository.findById(idPublication).isEmpty()) {
+		Optional<PublicationEntity> oldPubl = Optional.of(publicationRepository.findPublicationById(idPublication)
+				.orElse(null));
+		
+		if (oldPubl.isEmpty()) {
 			throw new ProyectSearchException("No Publication was found with that id");
 		}
 		
-		PublicationEntity newPub = serviceSetter.updatePublicationSetter(pub);
+		PublicationEntity newPub = serviceSetter.updatePublicationSetter(oldPubl.get(), pub);
 		
 		PublicationEntity publication = publicationRepository.save(newPub);
 		
@@ -110,22 +121,28 @@ public class PublicationServiceImpl implements PublicationService {
 	@Override
 	public ProjectEntity getProjectById(Long id) {
 
-		Optional<ProjectEntity> project = projectRepository.findProjectById(id);
+		log.debug("Entering getProjectById [id]:{} ",  id);
 		
-		return project.orElse(null);
+		Optional<ProjectEntity> project = Optional.of(projectRepository.findProjectById(id)
+				.orElseThrow());
+		
+		log.debug("Leaving getProjectById [response]:{} ",  project);
+		
+		return project.get();
 	}
 
 	@Override
 	public Long postProject(ProjectEntity project) {
 
 		log.debug("Entering postProject [request]:{} ",  project);
-		
-		project = serviceSetter.postProjectSetter(project);
-		//TODO id of organization
-//		Optional<OrganizationEntity> org = organizationRepository.findById(project.getIdOrganization());
-//		project.setOrganization(org.get());
-		
+
+		OrganizationEntity org = organizationRepository.findByIdOrganization(project.getIdOrganization());
+
+		if (org == null) {
+			throw new ProyectSearchException("The current user is deactivated");
+		}
 		try {
+			project = serviceSetter.postProjectSetter(project);
 			ProjectEntity responseEntity = projectRepository.save(project);
 			log.debug("Leaving postProject [response]:{} ",  responseEntity);
 			
@@ -139,11 +156,14 @@ public class PublicationServiceImpl implements PublicationService {
 	@Override
 	public ProjectEntity putProject(Long idProject, ProjectEntity proj) {
 		
-		if (projectRepository.findById(idProject).isEmpty()) {
+		Optional<ProjectEntity> oldProj = Optional.of(projectRepository.findProjectById(idProject)
+				.orElse(null));
+		
+		if (oldProj.isEmpty()) {
 			throw new ProyectSearchException("No Project was found with that id");
 		}
 		
-		ProjectEntity newProj = serviceSetter.updateProjectSetter(proj);
+		ProjectEntity newProj = serviceSetter.updateProjectSetter(oldProj.get(), proj);
 		
 		ProjectEntity project = projectRepository.save(newProj);
 		
