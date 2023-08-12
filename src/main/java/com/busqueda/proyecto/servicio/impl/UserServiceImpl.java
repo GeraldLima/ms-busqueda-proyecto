@@ -10,10 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.busqueda.proyecto.constants.Constants;
 import com.busqueda.proyecto.entidad.OrganizationEntity;
+import com.busqueda.proyecto.entidad.ProjectEntity;
+import com.busqueda.proyecto.entidad.PublicationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.entidad.SearchUserEntity;
 import com.busqueda.proyecto.exception.ProyectSearchException;
 import com.busqueda.proyecto.repositorio.OrganizationRepository;
+import com.busqueda.proyecto.repositorio.ProjectRepository;
+import com.busqueda.proyecto.repositorio.PublicationRepository;
 import com.busqueda.proyecto.repositorio.ScientistRepository;
 import com.busqueda.proyecto.repositorio.UserRepository;
 import com.busqueda.proyecto.servicio.UserService;
@@ -35,6 +39,12 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private PublicationRepository publicationRepository;
+	
+	@Autowired
+	private ProjectRepository projectRepository;
 	
 	@Autowired
 	private ServiceSetters serviceSetter;
@@ -96,20 +106,33 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Boolean deleteScientist(String orcid) {
 		
-		Boolean deleted = false;		
-		ScientistEntity scientist = scientistRepository.findByOrcid(orcid);
+		Boolean deleted = false;
 		
-		if (scientist == null) {
-			throw new ProyectSearchException("No Scientist found with that id");
-		}
-		
-		scientist.setActive(false);
-		scientistRepository.save(scientist);
-		deleted = true;
-		
+		try {
+			ScientistEntity scientist = scientistRepository.findByOrcid(orcid);
+			if (scientist == null) {
+				throw new ProyectSearchException("No Scientist found with that id");
+			}
+			this.deleteAllPublicationsByScientist(orcid);
+			scientist.setActive(false);
+			scientistRepository.save(scientist);
+			deleted = true;
+		} catch (Exception e) {
+			log.error("Error with deleteScientist service ");
+			throw new ProyectSearchException("Error in delete Scientist-Publications cascade" + e);
+		}		
 		//return (scientistRepository.deleteByOrcid(orcid))? true : false;
 		
 		return deleted;
+	}
+	
+	protected void deleteAllPublicationsByScientist(String idScientist) {
+
+		List<PublicationEntity> listPubli = publicationRepository.findPublicationsByIdScientist(idScientist);
+		listPubli.forEach(pub -> {
+			pub.setActive(false);
+			publicationRepository.save(pub);
+		});
 	}
 	
 	@Override
@@ -121,9 +144,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public OrganizationEntity getOrganizationById(String id) {
+	public OrganizationEntity getOrganizationById(Long id) {
 
-		OrganizationEntity organization = organizationRepository.findByIdOrganization(id);
+		Optional<OrganizationEntity> organization = organizationRepository.findById(id);
+		
+		return organization != null? organization.get() : null;
+	}
+	
+	@Override
+	public OrganizationEntity getOrganizationByIdOrg(String idOrganization) {
+
+		OrganizationEntity organization = organizationRepository.findByIdOrganization(idOrganization);
 		
 		return organization != null? organization : null;
 	}
@@ -173,19 +204,34 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Boolean deleteOrganization(String idOrganization) {
 		
-		Boolean deleted = false;		
-		OrganizationEntity org = organizationRepository.findByIdOrganization(idOrganization);
+		Boolean deleted = false;
 		
-		if (org == null) {
-			throw new ProyectSearchException("No Organization found with that id");
-		}
-		
-		org.setActive(false);
-		organizationRepository.save(org);
-		deleted = true;
+		try {
+			OrganizationEntity org = organizationRepository.findByIdOrganization(idOrganization);
+			
+			if (org == null) {
+				throw new ProyectSearchException("No Organization found with that id");
+			}
+			this.deleteAllProjectsByOrganization(idOrganization);
+			org.setActive(false);
+			organizationRepository.save(org);
+			deleted = true;
+		} catch (Exception e) {
+			log.error("Error with deleteOrganization service ");
+			throw new ProyectSearchException("Error in delete Organization-Project cascade" + e);
+		}		
 		//return (organizaionRepository.deleteByOrcid(orcid))? true : false;
 		
 		return deleted;
+	}
+	
+	protected void deleteAllProjectsByOrganization(String idOrganization) {
+
+		List<ProjectEntity> listProj = projectRepository.findProjectsByIdOrganization(idOrganization);
+		listProj.forEach(proj -> {
+			proj.setActive(false);
+			projectRepository.save(proj);
+		});
 	}
 
 	@Override

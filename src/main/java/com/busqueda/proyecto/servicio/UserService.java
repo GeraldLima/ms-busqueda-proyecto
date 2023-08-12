@@ -24,7 +24,9 @@ public interface UserService {
 	
 	Long postOrganization(OrganizationEntity org);
 	
-	OrganizationEntity getOrganizationById(String id);
+	OrganizationEntity getOrganizationById(Long id);
+	
+	OrganizationEntity getOrganizationByIdOrg(String id);
 
 	OrganizationEntity putOrganization(Long idOrganization, OrganizationEntity org);
 

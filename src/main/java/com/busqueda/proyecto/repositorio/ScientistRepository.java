@@ -1,5 +1,7 @@
 package com.busqueda.proyecto.repositorio;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +13,10 @@ import com.busqueda.proyecto.entidad.ScientistEntity;
 @Repository
 public interface ScientistRepository extends JpaRepository<ScientistEntity, Long> {
 
+	@Query("SELECT sc FROM ScientistEntity sc WHERE sc.id = :id "
+			+ "AND sc.active = TRUE")
+	Optional<ScientistEntity> findById(@Param("id") Long id);
+	
 	@Query("SELECT sc FROM ScientistEntity sc WHERE sc.orcid = :orcid "
 			+ "AND sc.active = TRUE")
 	ScientistEntity findByOrcid(@Param("orcid") String orcid);

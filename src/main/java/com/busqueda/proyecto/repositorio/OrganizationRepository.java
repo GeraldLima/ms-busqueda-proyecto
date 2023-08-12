@@ -1,6 +1,7 @@
 package com.busqueda.proyecto.repositorio;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +13,10 @@ import com.busqueda.proyecto.entidad.OrganizationEntity;
 @Repository
 public interface OrganizationRepository extends JpaRepository<OrganizationEntity, Long> {
 
+	@Query("SELECT org FROM OrganizationEntity org WHERE org.id = :id "
+			+ "AND org.active = TRUE ")
+	Optional<OrganizationEntity> findById(@Param("id") Long id);
+	
 	@Query("SELECT org FROM OrganizationEntity org WHERE org.idOrganization = :id "
 			+ "AND org.active = TRUE ")
 	OrganizationEntity findByIdOrganization(@Param("id") String id);

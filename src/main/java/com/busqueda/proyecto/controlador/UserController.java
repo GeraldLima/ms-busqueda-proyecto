@@ -96,8 +96,19 @@ public class UserController {
 	@Operation(summary = "Find an Organization by its id", method = "GET")
 	public ResponseEntity<OrganizationEntity> getOrganizationById(
 			@Parameter(description = "ID of an Organization to be searched") 
-			@PathVariable(name = "id") String id) {
+			@PathVariable(name = "id") Long id) {
 		OrganizationEntity organization = service.getOrganizationById(id);
+		
+		return ResponseEntity.ok().body(organization);
+	}
+	
+	@GetMapping(value = "/organismo/findBy/{idOrganization}", 
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Find an Organization by idOrganization", method = "GET")
+	public ResponseEntity<OrganizationEntity> getOrganizationById(
+			@Parameter(description = "ID of an Organization to be searched") 
+			@PathVariable(name = "idOrganization") String idOrganization) {
+		OrganizationEntity organization = service.getOrganizationByIdOrg(idOrganization);
 		
 		return ResponseEntity.ok().body(organization);
 	}
