@@ -29,4 +29,8 @@ public interface ScientistRepository extends JpaRepository<ScientistEntity, Long
 	@Query("SELECT sc FROM ScientistEntity sc "
 			+ "WHERE sc.userUuid = :idUser AND sc.active = TRUE ")
 	ScientistEntity findByUuid(@Param("idUser") String idUser);
+
+	@Query("SELECT CASE WHEN COUNT (sc) > 0 THEN false ELSE true END FROM ScientistEntity sc "
+			+ "WHERE sc.orcid = :orcidIn AND sc.active = TRUE ")
+	Boolean existsByOrcid(@Param("orcidIn") String orcidIn);
 }

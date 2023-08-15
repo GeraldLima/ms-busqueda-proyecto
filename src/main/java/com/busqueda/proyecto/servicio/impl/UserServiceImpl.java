@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
 		
 		return deleted;
 	}
-	
+		
 	protected void deleteAllPublicationsByScientist(String idScientist) {
 
 		List<PublicationEntity> listPubli = publicationRepository.findPublicationsByIdScientist(idScientist);
@@ -133,6 +133,12 @@ public class UserServiceImpl implements UserService {
 			pub.setActive(false);
 			publicationRepository.save(pub);
 		});
+	}
+	
+	@Override
+	public Boolean getScientistIsExistsByOrcid(String orcid) {
+		
+		return scientistRepository.existsByOrcid(orcid);
 	}
 	
 	@Override
@@ -232,6 +238,12 @@ public class UserServiceImpl implements UserService {
 			proj.setActive(false);
 			projectRepository.save(proj);
 		});
+	}
+	
+	@Override
+	public Boolean getOrganizationIsExistsById(String idOrganization) {
+		
+		return organizationRepository.existsByIdOrganization(idOrganization);
 	}
 
 	@Override

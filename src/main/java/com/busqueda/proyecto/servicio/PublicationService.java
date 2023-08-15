@@ -2,6 +2,8 @@ package com.busqueda.proyecto.servicio;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.busqueda.proyecto.entidad.ProjectEntity;
 import com.busqueda.proyecto.entidad.PublicationEntity;
 
@@ -26,5 +28,9 @@ public interface PublicationService {
 	List<ProjectEntity> getProjects(String idOrganization);
 
 	Boolean deleteProject(Long id);
+
+	Page<PublicationEntity> getAllPublications(Integer page, Integer size);
+
+	Page<ProjectEntity> getAllProjects(Integer page, Integer size);
 
 }

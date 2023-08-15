@@ -3,6 +3,7 @@ package com.busqueda.proyecto.controlador;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.busqueda.proyecto.entidad.ProjectEntity;
@@ -69,6 +71,16 @@ public class PublicationController {
 		
 		return ResponseEntity.ok().body(service.getPublications(idScientist));
 	}
+	
+	@GetMapping(value = "/publicacion/all", 
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Find all Publications", method = "GET")
+	public ResponseEntity<Page<PublicationEntity>> getAllPublications(
+			@RequestParam(name="page", required=false) Integer page, 
+			@RequestParam(name="size", required=false) Integer size) {
+		
+		return ResponseEntity.ok().body(service.getAllPublications(page, size));
+	}
 
 	@DeleteMapping(value = "/publicacion/{id}")
 	@Operation(summary = "Delete a Publication by its id", method = "DELETE")
@@ -120,6 +132,16 @@ public class PublicationController {
 			@PathVariable (name="idOrganismo") String idOrganization) {
 		
 		return ResponseEntity.ok().body(service.getProjects(idOrganization));
+	}
+	
+	@GetMapping(value = "/proyecto/all", 
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Find all Projects", method = "GET")
+	public ResponseEntity<Page<ProjectEntity>> getAllProjects(
+		@RequestParam(name="page", required=false) Integer page, 
+		@RequestParam(name="size", required=false) Integer size) {
+		
+		return ResponseEntity.ok().body(service.getAllProjects(page, size));
 	}
 
 	@DeleteMapping(value = "/proyecto/{id}")

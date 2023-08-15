@@ -29,4 +29,8 @@ public interface OrganizationRepository extends JpaRepository<OrganizationEntity
 			+ "WHERE UPPER(org.name) LIKE CONCAT('%', UPPER(:nameOrg), '%') "
 			+ "AND org.active = TRUE ")
 	List<OrganizationEntity> findOrganizationsByName(@Param("nameOrg") String nameOrg);
+
+	@Query("SELECT CASE WHEN COUNT (org) > 0 THEN false ELSE true END FROM OrganizationEntity org "
+			+ "WHERE org.idOrganization = :idOrganizationIn AND org.active = TRUE ")
+	Boolean existsByIdOrganization(@Param("idOrganizationIn") String idOrganizationIn);
 }

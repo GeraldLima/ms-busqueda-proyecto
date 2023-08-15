@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,7 +75,7 @@ public class PublicationServiceImpl implements PublicationService {
 			return responseEntity.getId();
 		} catch (Exception e) {
 			log.error("Error with postPublication service ");
-			throw new ProyectSearchException("Error in repository response." + e);
+			throw new ProyectSearchException("Error in repository response. " + e);
 		}
 	}
 
@@ -149,7 +152,7 @@ public class PublicationServiceImpl implements PublicationService {
 			return responseEntity.getId();
 		} catch (Exception e) {
 			log.error("Error with postProject service ");
-			throw new ProyectSearchException("Error in repository response." + e);
+			throw new ProyectSearchException("Error in repository response. " + e);
 		}
 	}
 
@@ -194,6 +197,49 @@ public class PublicationServiceImpl implements PublicationService {
 		
 		return deleted;
 	}
+	
+	@Override
+	public Page<PublicationEntity> getAllPublications(Integer page, Integer size) {
+		
+		Page<PublicationEntity> publications = null;
+		Pageable pubPageable = Pageable.unpaged();
+		
+		try {
+			if (page != null && size != null) {
+				pubPageable = PageRequest.of(page, size);
+			}
+			publications = publicationRepository.findAll(pubPageable);			
+			
+			if (publications.isEmpty()) {
+				throw new ProyectSearchException("No Publications were found");
+			}
+		} catch (Exception e) {
+			log.error("Error in getAllPublications service ");
+			throw new ProyectSearchException("Error in repository response. " + e);
+		}
+		return publications;
+	}
 
+	@Override
+	public Page<ProjectEntity> getAllProjects(Integer page, Integer size) {
+		
+		Page<ProjectEntity> projects = null;
+		Pageable projPageable = Pageable.unpaged();
+		
+		try {
+			if (page != null && size != null) {
+				projPageable = PageRequest.of(page, size);
+			}
+			projects = projectRepository.findAll(projPageable);			
+			
+			if (projects.isEmpty()) {
+				throw new ProyectSearchException("No Projects were found");
+			}
+		} catch (Exception e) {
+			log.error("Error in getAllProjects service ");
+			throw new ProyectSearchException("Error in repository response. " + e);
+		}
+		return projects;
+	}
 	
 }

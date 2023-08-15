@@ -19,6 +19,6 @@ public interface PublicationRepository extends JpaRepository<PublicationEntity, 
 
 	@Query("SELECT pub FROM PublicationEntity pub "
 			+ "INNER JOIN ScientistEntity sc ON sc.orcid = pub.idScientist AND sc.active = TRUE "
-			+ "WHERE pub.idScientist = :idScientist ")
+			+ "WHERE pub.idScientist = :idScientist AND pub.active = TRUE")
 	List<PublicationEntity> findPublicationsByIdScientist(@Param("idScientist") String idScientist);
 }

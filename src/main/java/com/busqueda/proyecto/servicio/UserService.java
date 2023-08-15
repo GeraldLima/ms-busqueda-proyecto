@@ -39,5 +39,9 @@ public interface UserService {
 	GetLoginDTO loginProcess(String uuidUser);
 
 	List<OrganizationEntity> getOrganizationsByName(String nameOrg);
+
+	Boolean getScientistIsExistsByOrcid(String orcid);
+
+	Boolean getOrganizationIsExistsById(String idOrganization);
 	
 }

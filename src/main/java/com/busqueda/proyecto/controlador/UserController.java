@@ -91,6 +91,16 @@ public class UserController {
 		return ResponseEntity.ok().body(service.deleteScientist(orcid));
 	}
 	
+	@GetMapping(value = "/cientifico/isExists/{orcid}",
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Find out if a Scientist exists by its id", method = "GET")
+	public ResponseEntity<Boolean> getScientistIsExistsByOrcid(
+			@Parameter(description = "ORCID of a Scientist to be searched") 
+			@PathVariable(name = "orcid") String orcid) {
+		
+		return ResponseEntity.ok().body(service.getScientistIsExistsByOrcid(orcid));
+	}
+	
 	@GetMapping(value = "/organismo/{id}", 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find an Organization by its id", method = "GET")
@@ -161,6 +171,16 @@ public class UserController {
 			@PathVariable String idOrganization) {
 		
 		return ResponseEntity.ok().body(service.deleteOrganization(idOrganization));
+	}
+	
+	@GetMapping(value = "/organismo/isExists/{idOrganization}",
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Find out if an Organization exists by its id", method = "GET")
+	public ResponseEntity<Boolean> getOrganizationIsExistsById(
+			@Parameter(description = "Id of an Organization to be searched") 
+			@PathVariable(name = "idOrganization") String idOrganization) {
+		
+		return ResponseEntity.ok().body(service.getOrganizationIsExistsById(idOrganization));
 	}
 	
 	@PostMapping(value = "/usuario", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
