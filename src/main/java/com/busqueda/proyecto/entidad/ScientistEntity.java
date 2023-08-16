@@ -38,6 +38,9 @@ public class ScientistEntity implements Serializable {
 	@Column(name="UID_USUARIO")
 	private String userUuid;
 	
+	@Column(name="ID_PROYECTO")
+	private Long idProject;
+	
 	@Column(name="NOMBRE")
 	private String name;
 	
@@ -46,6 +49,9 @@ public class ScientistEntity implements Serializable {
 	
 	@Column(name="PROFESION")
 	private String profession;
+	
+	@Column(name="DISPONIBLE")
+	private Boolean available;
 	
 	@Column(name="ACTIVO")
 	private Boolean active;

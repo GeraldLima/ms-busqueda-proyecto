@@ -3,6 +3,7 @@ package com.busqueda.proyecto.servicio;
 import java.util.List;
 
 import com.busqueda.proyecto.entidad.OrganizationEntity;
+import com.busqueda.proyecto.entidad.ProjectEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.entidad.SearchUserEntity;
 
@@ -43,5 +44,9 @@ public interface UserService {
 	Boolean getScientistIsExistsByOrcid(String orcid);
 
 	Boolean getOrganizationIsExistsById(String idOrganization);
+
+	Boolean assignmentProcess(ProjectEntity project, String orcid);
+
+	List<ProjectEntity> getRecommendedProjects(ScientistEntity request);
 	
 }

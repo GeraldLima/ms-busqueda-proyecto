@@ -47,10 +47,22 @@ public class ProjectEntity implements Serializable {
 	private String description;
 	
 	@Column(name="TAMANIO")
-	private Integer capacity;
+	private Integer size;
 	
 	@Column(name="DURACION")
 	private String duration;
+	
+	@Column(name="CAPACIDAD")
+	private Integer capacity;
+	
+	@Column(name="AMBITO")
+	private String scope;
+	
+	@Column(name="SUBAMBITO")
+	private String subscope;
+	
+	@Column(name="COMPLETO")
+	private Boolean full;
 	
 	@Column(name="ACTIVO")
 	private Boolean active;

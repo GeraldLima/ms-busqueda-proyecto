@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.busqueda.proyecto.entidad.OrganizationEntity;
+import com.busqueda.proyecto.entidad.ProjectEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.entidad.SearchUserEntity;
 import com.busqueda.proyecto.servicio.UserService;
@@ -116,7 +117,7 @@ public class UserController {
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find an Organization by idOrganization", method = "GET")
 	public ResponseEntity<OrganizationEntity> getOrganizationById(
-			@Parameter(description = "ID of an Organization to be searched") 
+			@Parameter(description = "Identification of an Organization to be searched") 
 			@PathVariable(name = "idOrganization") String idOrganization) {
 		OrganizationEntity organization = service.getOrganizationByIdOrg(idOrganization);
 		
@@ -137,7 +138,7 @@ public class UserController {
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Update a Organization by its id and a body request", method = "PUT")
 	public ResponseEntity<OrganizationEntity> putOrganization(
-			@Parameter(description = "orcid of a Organization to be updated") 
+			@Parameter(description = "Identification of an Organization to be updated") 
 			@PathVariable (name="id") Long idOrganization, 
 			@RequestBody OrganizationEntity org) {
 		OrganizationEntity organization = service.putOrganization(idOrganization, org);
@@ -167,7 +168,7 @@ public class UserController {
 	@DeleteMapping(value = "/organismo/{idOrganization}")
 	@Operation(summary = "Delete a Organization by its id", method = "DELETE")
 	public ResponseEntity<Boolean> deleteOrganization(
-			@Parameter(description = "orcid of a Organization to be deleted") 
+			@Parameter(description = "Id of an Organization to be deleted") 
 			@PathVariable String idOrganization) {
 		
 		return ResponseEntity.ok().body(service.deleteOrganization(idOrganization));
@@ -205,6 +206,26 @@ public class UserController {
 		return ResponseEntity.ok().body(responseDto);
 	}
 	
+	@GetMapping(value = "/cientifico/isAssigned/{orcid}", 
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Assign an available Scientist by an orcid to a not full Project", 
+			method = "GET")
+	public ResponseEntity<Boolean> assigninmentProcess(
+			@Parameter(description = "orcid of a Scientist to be assigned") 
+			@PathVariable (name="orcid") String orcid, 
+			@RequestBody ProjectEntity request) {
+		
+		return ResponseEntity.ok().body(service.assignmentProcess(request, orcid));
+	}
 	
+	@GetMapping(value = "/cientifico/recomendation",
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Find a list of Projets recommended by the application", method = "GET")
+	public ResponseEntity<List<ProjectEntity>> getRecomendedProjects(
+			@RequestBody ScientistEntity request) {
+		List<ProjectEntity> listProjects = service.getRecommendedProjects(request);
+		
+		return ResponseEntity.ok().body(listProjects);
+	}
 	
 }

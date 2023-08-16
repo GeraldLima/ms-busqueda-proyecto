@@ -22,6 +22,7 @@ import com.busqueda.proyecto.repositorio.ScientistRepository;
 import com.busqueda.proyecto.repositorio.UserRepository;
 import com.busqueda.proyecto.servicio.UserService;
 import com.busqueda.proyecto.setters.ServiceSetters;
+import com.busqueda.proyecto.utils.ProjectUtils;
 
 import dto.GetLoginDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -288,5 +289,52 @@ public class UserServiceImpl implements UserService {
 
 		return responseDto;
 	}
+	
+	@Override
+	public Boolean assignmentProcess(ProjectEntity project, String orcid) {
+		
+		log.debug("Entering assignmentProcess [request]:{}, [orcid]:{} ",  project, orcid);
+		
+		Boolean assigned = false;
+		Integer capacity = project.getCapacity();
+		Integer size = project.getSize();
+		
+		if (size >= capacity || project.getFull()) {
+			throw new ProyectSearchException("The curent project is already full ");
+		}
+		try {
+			ScientistEntity sc = scientistRepository.findByOrcid(orcid);
+			
+			if (sc == null || !sc.getAvailable()) {
+				throw new ProyectSearchException("Scientist not found or avaible with that id: " + orcid);
+			}
+			
+			sc.setIdProject(project.getId());
+			sc.setAvailable(false);		
+			scientistRepository.save(sc);
+			
+			size ++;
+			if (capacity == size) {
+				project.setFull(true);
+			}
+			project.setSize(size);
+			project.setUpdateLife(ProjectUtils.getLocalDateTimeNow());
+			projectRepository.save(project);
+			
+			assigned = true;
+		} catch (Exception e) {
+			log.error("Error with postUserUUID service ");
+			throw new ProyectSearchException("Error in repository response." + e);
+		}
+		
+		return assigned;
+	}
+
+	@Override
+	public List<ProjectEntity> getRecommendedProjects(ScientistEntity request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	
 }

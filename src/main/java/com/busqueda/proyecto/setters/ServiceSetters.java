@@ -80,6 +80,8 @@ public class ServiceSetters {
 
 		project.setActive(true);
 //		project.setId(id);
+		project.setSize(0);
+		project.setFull(false);
 		project.setInitLifeDate(ProjectUtils.getLocalDateTimeNow());
 		
 		return project;
@@ -92,7 +94,8 @@ public class ServiceSetters {
 		old.setDescription(proj.getDescription());
 		old.setCapacity(proj.getCapacity());
 		old.setDuration(proj.getDuration());
-//		old.setActive(proj.getActive());
+		old.setScope(proj.getScope());
+		old.setSubscope(proj.getSubscope());
 		old.setUpdateLife(ProjectUtils.getLocalDateTimeNow());
 		
 		return old;
