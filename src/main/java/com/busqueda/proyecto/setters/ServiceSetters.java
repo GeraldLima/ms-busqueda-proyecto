@@ -18,6 +18,14 @@ public class ServiceSetters {
 
 	private Random random;
 	
+	public ScientistEntity insertScientistSetter(ScientistEntity sc) {
+		
+		sc.setAvailable(true);
+		sc.setActive(true);
+		
+		return sc;
+	}
+			
 	public ScientistEntity updateScientistSetter(ScientistEntity old, ScientistEntity sc) {
 		
 //		old.setId(sc.getId());

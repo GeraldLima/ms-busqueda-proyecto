@@ -3,6 +3,7 @@ package com.busqueda.proyecto.controlador;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -206,11 +207,11 @@ public class UserController {
 		return ResponseEntity.ok().body(responseDto);
 	}
 	
-	@GetMapping(value = "/cientifico/isAssigned/{orcid}", 
+	@GetMapping(value = "/cientifico/isAssigned/{orcid}", consumes = { MediaType.APPLICATION_JSON_VALUE },
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Assign an available Scientist by an orcid to a not full Project", 
 			method = "GET")
-	public ResponseEntity<Boolean> assigninmentProcess(
+	public ResponseEntity<Boolean> assignmentProcess(
 			@Parameter(description = "orcid of a Scientist to be assigned") 
 			@PathVariable (name="orcid") String orcid, 
 			@RequestBody ProjectEntity request) {
@@ -218,12 +219,14 @@ public class UserController {
 		return ResponseEntity.ok().body(service.assignmentProcess(request, orcid));
 	}
 	
-	@GetMapping(value = "/cientifico/recomendation",
+	@GetMapping(value = "/cientifico/recommendation/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE },
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find a list of Projets recommended by the application", method = "GET")
-	public ResponseEntity<List<ProjectEntity>> getRecomendedProjects(
+	public ResponseEntity<Page<ProjectEntity>> getRecomendedProjects(
+			@Parameter(description = "Id of a Scientist to be recommended") 
+			@PathVariable (name="id") Long idScientist,
 			@RequestBody ScientistEntity request) {
-		List<ProjectEntity> listProjects = service.getRecommendedProjects(request);
+		Page<ProjectEntity> listProjects = service.getRecommendedProjects(idScientist, request);
 		
 		return ResponseEntity.ok().body(listProjects);
 	}

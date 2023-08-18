@@ -1,0 +1,24 @@
+package dto;
+
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class ProjectMetrics {
+
+	private String profession;
+	
+	private List<String> listExpertise;
+//	
+//	private String scope;
+//	
+//	private String subscope;	
+	
+}

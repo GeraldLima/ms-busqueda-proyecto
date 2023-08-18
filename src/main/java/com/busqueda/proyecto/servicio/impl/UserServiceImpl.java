@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import com.busqueda.proyecto.entidad.PublicationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.entidad.SearchUserEntity;
 import com.busqueda.proyecto.exception.ProyectSearchException;
+import com.busqueda.proyecto.repositorio.DynamicRepository;
 import com.busqueda.proyecto.repositorio.OrganizationRepository;
 import com.busqueda.proyecto.repositorio.ProjectRepository;
 import com.busqueda.proyecto.repositorio.PublicationRepository;
@@ -25,6 +27,7 @@ import com.busqueda.proyecto.setters.ServiceSetters;
 import com.busqueda.proyecto.utils.ProjectUtils;
 
 import dto.GetLoginDTO;
+import dto.ProjectMetrics;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -48,6 +51,9 @@ public class UserServiceImpl implements UserService {
 	private ProjectRepository projectRepository;
 	
 	@Autowired
+	private DynamicRepository dynamicRepository;
+	
+	@Autowired
 	private ServiceSetters serviceSetter;
 	
 	
@@ -56,7 +62,10 @@ public class UserServiceImpl implements UserService {
 		
 		log.debug("Entering postScientist [request]:{} ",  sc);
 		
-		ScientistEntity scientist = scientistRepository.save(sc);
+		
+		ScientistEntity scientist = serviceSetter.insertScientistSetter(sc);
+				
+		scientist = scientistRepository.save(scientist);
 		
 		log.debug("Leaving postScientist [response]:{} ",  scientist);
 		
@@ -313,7 +322,7 @@ public class UserServiceImpl implements UserService {
 			sc.setAvailable(false);		
 			scientistRepository.save(sc);
 			
-			size ++;
+			size +=size;
 			if (capacity == size) {
 				project.setFull(true);
 			}
@@ -331,9 +340,40 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<ProjectEntity> getRecommendedProjects(ScientistEntity request) {
-		// TODO Auto-generated method stub
-		return null;
+	public Page<ProjectEntity> getRecommendedProjects(Long idScientist, ScientistEntity request) {
+
+		Page<ProjectEntity> responseCriteria = null;
+		
+		ProjectMetrics projMetrics = new ProjectMetrics();
+		projMetrics.setListExpertise(new ArrayList<>());
+		try {
+			if (!request.getAvailable()) {
+				throw new ProyectSearchException(
+						"The current Scientist is unavailable" + request.getName());
+			}
+			
+			List<PublicationEntity> publications = publicationRepository
+					.findPublicationsByIdScientist(request.getOrcid());
+			
+			for (PublicationEntity pub : publications) {
+				projMetrics.getListExpertise().add(pub.getExpertise().toUpperCase());
+			}
+			
+			projMetrics.setProfession(request.getProfession());
+		
+			responseCriteria = dynamicRepository.findRecomendedProjects(projMetrics);			
+			
+			if (responseCriteria.isEmpty()) {
+				throw new ProyectSearchException(
+						"Sorry, there are not recomended projects for the scientitst" + request.getName());
+			}
+			
+		} catch (Exception e) {
+			log.error("Error with getRecommendedProjects service ");
+			throw new ProyectSearchException("Error in repository response." + e);
+		}
+		
+		return responseCriteria;
 	}
 	
 	

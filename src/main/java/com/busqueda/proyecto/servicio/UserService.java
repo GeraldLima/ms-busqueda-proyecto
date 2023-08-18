@@ -2,6 +2,8 @@ package com.busqueda.proyecto.servicio;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.busqueda.proyecto.entidad.OrganizationEntity;
 import com.busqueda.proyecto.entidad.ProjectEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
@@ -47,6 +49,6 @@ public interface UserService {
 
 	Boolean assignmentProcess(ProjectEntity project, String orcid);
 
-	List<ProjectEntity> getRecommendedProjects(ScientistEntity request);
+	Page<ProjectEntity> getRecommendedProjects(Long id, ScientistEntity request);
 	
 }
