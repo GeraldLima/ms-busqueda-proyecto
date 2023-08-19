@@ -347,10 +347,6 @@ public class UserServiceImpl implements UserService {
 		ProjectMetrics projMetrics = new ProjectMetrics();
 		projMetrics.setListExpertise(new ArrayList<>());
 		try {
-			if (!request.getAvailable()) {
-				throw new ProyectSearchException(
-						"The current Scientist is unavailable" + request.getName());
-			}
 			
 			List<PublicationEntity> publications = publicationRepository
 					.findPublicationsByIdScientist(request.getOrcid());
