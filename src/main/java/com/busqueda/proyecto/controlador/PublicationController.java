@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.busqueda.proyecto.entidad.ProjectEntity;
 import com.busqueda.proyecto.entidad.PublicationEntity;
+import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.servicio.PublicationService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -91,6 +92,15 @@ public class PublicationController {
 		return ResponseEntity.ok().body(service.deletePublication(id));
 	}
 	
+	@GetMapping(value = "/publicacion/reactivate/{idPublication}")
+	@Operation(summary = "Reactivate a Publication by its id", method = "GET")
+	public ResponseEntity<Boolean> reactivatePublication(
+			@Parameter(description = "Id of a Publication to be reactivated") 
+			@PathVariable Long idPublication) {
+		
+		return ResponseEntity.ok().body(service.reactivatePublication(idPublication));
+	}
+	
 	@GetMapping(value = "/proyecto/{id}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find a Project by its id", method = "GET")
@@ -151,6 +161,26 @@ public class PublicationController {
 			@PathVariable Long id) {
 		
 		return ResponseEntity.ok().body(service.deleteProject(id));
+	}
+	
+	@GetMapping(value = "/proyecto/reactivate/{idProject}")
+	@Operation(summary = "Reactivate a Project by its id", method = "GET")
+	public ResponseEntity<Boolean> reactivateProject(
+			@Parameter(description = "Id of a Project to be reactivated") 
+			@PathVariable Long idProject) {
+		
+		return ResponseEntity.ok().body(service.reactivateProject(idProject));
+	}
+	
+	@GetMapping(value = "/proyecto/recommendation/{idProject}",
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Find a list of Scientists recommended by the application", method = "GET")
+	public ResponseEntity<Page<ScientistEntity>> getRecomendedScientists(
+			@Parameter(description = "Id of a Project to be recommended") 
+			@PathVariable (name="idProject") Long idProject) {
+		Page<ScientistEntity> scientistList = service.getRecommendedScientists(idProject);
+		
+		return ResponseEntity.ok().body(scientistList);
 	}
 	
 }

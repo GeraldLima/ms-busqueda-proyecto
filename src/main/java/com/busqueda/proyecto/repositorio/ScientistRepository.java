@@ -38,5 +38,7 @@ public interface ScientistRepository extends JpaRepository<ScientistEntity, Long
 			+ "WHERE sc.orcid = :orcidIn AND sc.active = TRUE ")
 	Boolean existsByOrcid(@Param("orcidIn") String orcidIn);
 
-//	List<ProjectEntity> findRecomendedProjects(ProjectMetrics metrics);
+	@Query("SELECT sc FROM ScientistEntity sc WHERE sc.orcid = :orcid "
+			+ "AND sc.active = FALSE")
+	ScientistEntity findDeactivatedScientist(@Param("orcid") String orcid);
 }

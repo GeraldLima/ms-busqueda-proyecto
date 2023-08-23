@@ -33,4 +33,8 @@ public interface OrganizationRepository extends JpaRepository<OrganizationEntity
 	@Query("SELECT CASE WHEN COUNT (org) > 0 THEN false ELSE true END FROM OrganizationEntity org "
 			+ "WHERE org.idOrganization = :idOrganizationIn AND org.active = TRUE ")
 	Boolean existsByIdOrganization(@Param("idOrganizationIn") String idOrganizationIn);
+	
+	@Query("SELECT org FROM OrganizationEntity org WHERE org.idOrganization = :id "
+			+ "AND org.active = FALSE ")
+	OrganizationEntity findDeactivatedOrganization(@Param("id") String id);
 }

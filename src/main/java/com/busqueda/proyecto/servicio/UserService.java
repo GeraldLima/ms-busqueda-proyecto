@@ -47,8 +47,14 @@ public interface UserService {
 
 	Boolean getOrganizationIsExistsById(String idOrganization);
 
-	Boolean assignmentProcess(ProjectEntity project, String orcid);
+	Boolean reactivateScientist(String idScientist);
 
-	Page<ProjectEntity> getRecommendedProjects(Long id, ScientistEntity request);
+	Boolean reactivateOrganization(String idOrganization);
+	
+	Boolean assignmentProcess(Long idProject, String orcid);
+
+	Page<ProjectEntity> getRecommendedProjects(String orcid);
+
+
 	
 }

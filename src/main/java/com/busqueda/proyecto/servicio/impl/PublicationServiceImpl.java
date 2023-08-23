@@ -1,5 +1,6 @@
 package com.busqueda.proyecto.servicio.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ import com.busqueda.proyecto.entidad.ProjectEntity;
 import com.busqueda.proyecto.entidad.PublicationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.exception.ProyectSearchException;
+import com.busqueda.proyecto.repositorio.DynamicRepository;
 import com.busqueda.proyecto.repositorio.OrganizationRepository;
 import com.busqueda.proyecto.repositorio.ProjectRepository;
 import com.busqueda.proyecto.repositorio.PublicationRepository;
@@ -22,6 +24,8 @@ import com.busqueda.proyecto.repositorio.ScientistRepository;
 import com.busqueda.proyecto.servicio.PublicationService;
 import com.busqueda.proyecto.setters.ServiceSetters;
 
+import dto.ProjectMetrics;
+import dto.ScientistMetrics;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -40,6 +44,9 @@ public class PublicationServiceImpl implements PublicationService {
 	
 	@Autowired
 	private OrganizationRepository organizationRepository;
+	
+	@Autowired
+	private DynamicRepository dynamicRepository;
 	
 	@Autowired
 	private ServiceSetters serviceSetter;
@@ -116,7 +123,6 @@ public class PublicationServiceImpl implements PublicationService {
 			publicationRepository.save(publication.get());
 			deleted = true;
 		}
-		//return (scientistRepository.deleteByOrcid(orcid))? true : false;
 		
 		return deleted;
 	}
@@ -193,9 +199,40 @@ public class PublicationServiceImpl implements PublicationService {
 			projectRepository.save(project.get());
 			deleted = true;
 		}
-		//return (organizationRepository.deleteByIdOrganization(idOrg))? true : false;
 		
 		return deleted;
+	}
+	
+	@Override
+	public Boolean reactivateProject(Long idProject) {
+		
+		Boolean reactivated = false;
+		
+		Optional<ProjectEntity> project = projectRepository.findDeactivatedProject(idProject);
+		
+		if (project.get().getId() != null) {
+			project.get().setActive(true);
+			projectRepository.save(project.get());
+			reactivated = true;
+		}
+		
+		return reactivated;
+	}
+
+	@Override
+	public Boolean reactivatePublication(Long idPublication) {
+		
+		Boolean reactivated = false;
+		
+		Optional<PublicationEntity> publication = publicationRepository.findDeactivatedPublication(idPublication);
+		
+		if (publication.get().getId() != null) {
+			publication.get().setActive(true);
+			publicationRepository.save(publication.get());
+			reactivated = true;
+		}
+		
+		return reactivated;
 	}
 	
 	@Override
@@ -240,6 +277,45 @@ public class PublicationServiceImpl implements PublicationService {
 			throw new ProyectSearchException("Error in repository response. " + e);
 		}
 		return projects;
+	}
+
+	@Override
+	public Page<ScientistEntity> getRecommendedScientists(Long idProject) {
+		
+		Page<ScientistEntity> responseCriteria = null;
+		
+		ScientistMetrics scMetrics = new ScientistMetrics();
+		
+		Optional<ProjectEntity> project = Optional.of(projectRepository.findProjectById(idProject)
+				.orElseThrow());
+		
+		try {
+			
+			ProjectEntity proj = project.get();
+			
+			Integer capacity = proj.getCapacity();
+			Integer size = proj.getSize();
+			
+			if (size >= capacity || proj.getFull()) {
+				throw new ProyectSearchException("The curent project is already full ");
+			}
+			
+			scMetrics.setScope(proj.getScope());
+			scMetrics.setSubscope(proj.getSubscope());
+			
+			responseCriteria = dynamicRepository.findRecomendedScientists(scMetrics);			
+			
+			if (responseCriteria.isEmpty()) {
+				throw new ProyectSearchException(
+						"Sorry, there are not recomended scientists for that project " + proj.getId());
+			}
+			
+		} catch (Exception e) {
+			log.error("Error with getRecommendedProjects service ");
+			throw new ProyectSearchException("Error in repository response." + e);
+		}
+		
+		return responseCriteria;
 	}
 	
 }

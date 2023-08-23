@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.busqueda.proyecto.entidad.OrganizationEntity;
@@ -103,6 +104,15 @@ public class UserController {
 		return ResponseEntity.ok().body(service.getScientistIsExistsByOrcid(orcid));
 	}
 	
+	@GetMapping(value = "/cientifico/reactivate/{idScientist}")
+	@Operation(summary = "Reactivate an Scientist by its id", method = "GET")
+	public ResponseEntity<Boolean> reactivateScientist(
+			@Parameter(description = "Id of a Scientist to be reactivated") 
+			@PathVariable String idScientist) {
+		
+		return ResponseEntity.ok().body(service.reactivateScientist(idScientist));
+	}
+	
 	@GetMapping(value = "/organismo/{id}", 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find an Organization by its id", method = "GET")
@@ -167,7 +177,7 @@ public class UserController {
 	}
 
 	@DeleteMapping(value = "/organismo/{idOrganization}")
-	@Operation(summary = "Delete a Organization by its id", method = "DELETE")
+	@Operation(summary = "Delete an Organization by its id", method = "DELETE")
 	public ResponseEntity<Boolean> deleteOrganization(
 			@Parameter(description = "Id of an Organization to be deleted") 
 			@PathVariable String idOrganization) {
@@ -183,6 +193,15 @@ public class UserController {
 			@PathVariable(name = "idOrganization") String idOrganization) {
 		
 		return ResponseEntity.ok().body(service.getOrganizationIsExistsById(idOrganization));
+	}
+	
+	@GetMapping(value = "/organismo/reactivate/{idOrganization}")
+	@Operation(summary = "Reactivate an Organization by its id", method = "GET")
+	public ResponseEntity<Boolean> reactivateOrganization(
+			@Parameter(description = "Id of an Organization to be reactivated") 
+			@PathVariable String idOrganization) {
+		
+		return ResponseEntity.ok().body(service.reactivateOrganization(idOrganization));
 	}
 	
 	@PostMapping(value = "/usuario", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
@@ -207,28 +226,27 @@ public class UserController {
 		return ResponseEntity.ok().body(responseDto);
 	}
 	
-	@GetMapping(value = "/cientifico/isAssigned/{orcid}", consumes = { MediaType.APPLICATION_JSON_VALUE },
+	@GetMapping(value = "/cientifico/isAssigned/{orcid}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Assign an available Scientist by an orcid to a not full Project", 
 			method = "GET")
 	public ResponseEntity<Boolean> assignmentProcess(
 			@Parameter(description = "orcid of a Scientist to be assigned") 
 			@PathVariable (name="orcid") String orcid, 
-			@RequestBody ProjectEntity request) {
+			@RequestParam (required = true) Long idProject) {
 		
-		return ResponseEntity.ok().body(service.assignmentProcess(request, orcid));
+		return ResponseEntity.ok().body(service.assignmentProcess(idProject, orcid));
 	}
 	
-	@GetMapping(value = "/cientifico/recommendation/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE },
+	@GetMapping(value = "/cientifico/recommendation/{orcid}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find a list of Projets recommended by the application", method = "GET")
 	public ResponseEntity<Page<ProjectEntity>> getRecomendedProjects(
 			@Parameter(description = "Id of a Scientist to be recommended") 
-			@PathVariable (name="id") Long idScientist,
-			@RequestBody ScientistEntity request) {
-		Page<ProjectEntity> listProjects = service.getRecommendedProjects(idScientist, request);
+			@PathVariable (name="orcid") String orcid) {
+		Page<ProjectEntity> projectList = service.getRecommendedProjects(orcid);
 		
-		return ResponseEntity.ok().body(listProjects);
+		return ResponseEntity.ok().body(projectList);
 	}
 	
 }

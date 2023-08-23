@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 
 import com.busqueda.proyecto.entidad.ProjectEntity;
 import com.busqueda.proyecto.entidad.PublicationEntity;
+import com.busqueda.proyecto.entidad.ScientistEntity;
 
 public interface PublicationService {
 
@@ -28,9 +29,15 @@ public interface PublicationService {
 	List<ProjectEntity> getProjects(String idOrganization);
 
 	Boolean deleteProject(Long id);
+	
+	Boolean reactivateProject(Long idProject);
+
+	Boolean reactivatePublication(Long idPublication);
 
 	Page<PublicationEntity> getAllPublications(Integer page, Integer size);
 
 	Page<ProjectEntity> getAllProjects(Integer page, Integer size);
+
+	Page<ScientistEntity> getRecommendedScientists(Long idProject);
 
 }

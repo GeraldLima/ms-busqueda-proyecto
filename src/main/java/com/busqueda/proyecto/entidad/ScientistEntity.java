@@ -38,8 +38,8 @@ public class ScientistEntity implements Serializable {
 	@Column(name="UID_USUARIO")
 	private String userUuid;
 	
-	@Column(name="ID_PROYECTO")
-	private Long idProject;
+//	@Column(name="ID_PROYECTO")
+//	private Long idProject;
 	
 	@Column(name="NOMBRE")
 	private String name;

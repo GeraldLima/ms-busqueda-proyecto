@@ -1,7 +1,5 @@
 package dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,10 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProjectMetrics {
+public class ScientistMetrics {
 
-	private String profession;
+	private String scope;
 	
-	private List<String> listExpertise;
+	private String subscope;
 	
 }

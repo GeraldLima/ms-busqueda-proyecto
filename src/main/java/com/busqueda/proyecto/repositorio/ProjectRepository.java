@@ -21,4 +21,8 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
 			+ "INNER JOIN OrganizationEntity org ON org.idOrganization = proj.idOrganization AND org.active = TRUE "
 			+ "WHERE proj.idOrganization = :idOrganization AND proj.active = TRUE ")
 	List<ProjectEntity> findProjectsByIdOrganization(@Param("idOrganization") String idOrganization);
+	
+	@Query("SELECT proj FROM ProjectEntity proj "
+			+ "WHERE proj.id = :idProject AND proj.active = FALSE ")
+	Optional<ProjectEntity> findDeactivatedProject(@Param("idProject") Long idProject);
 }

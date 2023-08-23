@@ -10,12 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.busqueda.proyecto.constants.Constants;
+import com.busqueda.proyecto.entidad.AsignationEntity;
 import com.busqueda.proyecto.entidad.OrganizationEntity;
 import com.busqueda.proyecto.entidad.ProjectEntity;
 import com.busqueda.proyecto.entidad.PublicationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.entidad.SearchUserEntity;
 import com.busqueda.proyecto.exception.ProyectSearchException;
+import com.busqueda.proyecto.repositorio.AsignationRepository;
 import com.busqueda.proyecto.repositorio.DynamicRepository;
 import com.busqueda.proyecto.repositorio.OrganizationRepository;
 import com.busqueda.proyecto.repositorio.ProjectRepository;
@@ -49,6 +51,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private ProjectRepository projectRepository;
+	
+	@Autowired
+	private AsignationRepository asignationRepository;
 	
 	@Autowired
 	private DynamicRepository dynamicRepository;
@@ -130,8 +135,7 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception e) {
 			log.error("Error with deleteScientist service ");
 			throw new ProyectSearchException("Error in delete Scientist-Publications cascade" + e);
-		}		
-		//return (scientistRepository.deleteByOrcid(orcid))? true : false;
+		}
 		
 		return deleted;
 	}
@@ -235,8 +239,7 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception e) {
 			log.error("Error with deleteOrganization service ");
 			throw new ProyectSearchException("Error in delete Organization-Project cascade" + e);
-		}		
-		//return (organizaionRepository.deleteByOrcid(orcid))? true : false;
+		}
 		
 		return deleted;
 	}
@@ -290,20 +293,69 @@ public class UserServiceImpl implements UserService {
 				responseDto.setUserType(Constants.SCIENTIST);
 			}
 		}
-		
-		//TO FIX
+
 		if (responseDto.getIdUser() == null){
-			throw new ProyectSearchException("No user found with that id: " + uuidUser);
+			throw new ProyectSearchException("Non user found with that id: " + uuidUser);
 		}
 
 		return responseDto;
 	}
 	
 	@Override
-	public Boolean assignmentProcess(ProjectEntity project, String orcid) {
+	public Boolean reactivateScientist(String orcid) {
 		
-		log.debug("Entering assignmentProcess [request]:{}, [orcid]:{} ",  project, orcid);
+		Boolean reactivated = false;
 		
+		try {
+			ScientistEntity scientist = scientistRepository.findDeactivatedScientist(orcid);
+			if (scientist == null) {
+				throw new ProyectSearchException("No Scientist found with that id");
+			}
+			
+			scientist.setActive(false);
+			scientistRepository.save(scientist);
+			reactivated = true;
+		} catch (Exception e) {
+			log.error("Error with deleteScientist service ");
+			throw new ProyectSearchException("Error in delete Scientist-Publications cascade" + e);
+		}
+		
+		return reactivated;
+	}
+
+	@Override
+	public Boolean reactivateOrganization(String idOrganization) {
+		
+		Boolean reactivated = false;
+		
+		try {
+			OrganizationEntity org = organizationRepository.findDeactivatedOrganization(idOrganization);
+			
+			if (org == null) {
+				throw new ProyectSearchException("Non Organization found with that id");
+			}
+			
+			org.setActive(true);
+			organizationRepository.save(org);
+			reactivated = true;
+		} catch (Exception e) {
+			log.error("Error with deleteOrganization service ");
+			throw new ProyectSearchException("Error in delete Organization-Project cascade" + e);
+		}
+		
+		return reactivated;
+	}
+	
+	@Override
+	public Boolean assignmentProcess(Long idProject, String orcid) {
+		
+		log.debug("Entering assignmentProcess [idProject]:{}, [orcid]:{} ",  idProject, orcid);
+		
+		Optional<ProjectEntity> proj = projectRepository.findProjectById(idProject);
+		if (!proj.isPresent()){
+			throw new ProyectSearchException("Project no found");
+		}
+		ProjectEntity project = proj.get();
 		Boolean assigned = false;
 		Integer capacity = project.getCapacity();
 		Integer size = project.getSize();
@@ -317,12 +369,11 @@ public class UserServiceImpl implements UserService {
 			if (sc == null || !sc.getAvailable()) {
 				throw new ProyectSearchException("Scientist not found or avaible with that id: " + orcid);
 			}
-			
-			sc.setIdProject(project.getId());
+
 			sc.setAvailable(false);		
 			scientistRepository.save(sc);
 			
-			size +=size;
+			size +=1;
 			if (capacity == size) {
 				project.setFull(true);
 			}
@@ -330,7 +381,15 @@ public class UserServiceImpl implements UserService {
 			project.setUpdateLife(ProjectUtils.getLocalDateTimeNow());
 			projectRepository.save(project);
 			
+			AsignationEntity asignation = new AsignationEntity();
+			asignation.setIdProject(idProject);
+			asignation.setIdScientist(sc.getOrcid());
+			
+			asignationRepository.save(asignation);			
+			
 			assigned = true;
+			log.debug("Leaving assignmentProcess [response]:{} ", assigned);
+			
 		} catch (Exception e) {
 			log.error("Error with postUserUUID service ");
 			throw new ProyectSearchException("Error in repository response." + e);
@@ -340,30 +399,38 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Page<ProjectEntity> getRecommendedProjects(Long idScientist, ScientistEntity request) {
+	public Page<ProjectEntity> getRecommendedProjects(String orcid) {
 
+		log.debug("Entering getRecommendedProjects [request]:{} ", orcid);
+				
 		Page<ProjectEntity> responseCriteria = null;
 		
 		ProjectMetrics projMetrics = new ProjectMetrics();
 		projMetrics.setListExpertise(new ArrayList<>());
+		
+		ScientistEntity sc = scientistRepository.findByOrcid(orcid);
+		
+		if(sc == null) {
+			throw new ProyectSearchException("Scientitst not found"); 
+		}
 		try {
 			
 			List<PublicationEntity> publications = publicationRepository
-					.findPublicationsByIdScientist(request.getOrcid());
+					.findPublicationsByIdScientist(orcid);
 			
 			for (PublicationEntity pub : publications) {
 				projMetrics.getListExpertise().add(pub.getExpertise().toUpperCase());
 			}
 			
-			projMetrics.setProfession(request.getProfession());
+			projMetrics.setProfession(sc.getProfession());
 		
 			responseCriteria = dynamicRepository.findRecomendedProjects(projMetrics);			
 			
 			if (responseCriteria.isEmpty()) {
 				throw new ProyectSearchException(
-						"Sorry, there are not recomended projects for the scientitst" + request.getName());
+						"Sorry, there are not recomended projects for the scientitst" + sc.getName());
 			}
-			
+			log.debug("Leaving getRecommendedProjects [response]:{} ");
 		} catch (Exception e) {
 			log.error("Error with getRecommendedProjects service ");
 			throw new ProyectSearchException("Error in repository response." + e);
