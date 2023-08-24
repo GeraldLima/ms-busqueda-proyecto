@@ -1,8 +1,6 @@
 package com.busqueda.proyecto.entidad;
 
 import java.io.Serializable;
-import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -79,8 +77,4 @@ public class ProjectEntity implements Serializable {
  	@Column(name = "FEC_ACTUALIZACION")
  	private LocalDateTime updateLife;
 
-// 	@ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "ID")
-//    private OrganizationEntity organization;
- 	
 }

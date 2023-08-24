@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="ASIGNACION", schema="busqueda")
-public class AsignationEntity implements Serializable {
+public class AssignationEntity implements Serializable {
 
 	private static final long serialVersionUID = -2573139114013513407L;
 

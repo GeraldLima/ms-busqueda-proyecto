@@ -55,6 +55,8 @@ public interface UserService {
 
 	Page<ProjectEntity> getRecommendedProjects(String orcid);
 
+	ProjectEntity getProjectOfScientist(String orcid);
+
 
 	
 }

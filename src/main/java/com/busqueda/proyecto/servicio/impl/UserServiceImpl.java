@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.busqueda.proyecto.constants.Constants;
-import com.busqueda.proyecto.entidad.AsignationEntity;
+import com.busqueda.proyecto.entidad.AssignationEntity;
 import com.busqueda.proyecto.entidad.OrganizationEntity;
 import com.busqueda.proyecto.entidad.ProjectEntity;
 import com.busqueda.proyecto.entidad.PublicationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.entidad.SearchUserEntity;
 import com.busqueda.proyecto.exception.ProyectSearchException;
-import com.busqueda.proyecto.repositorio.AsignationRepository;
+import com.busqueda.proyecto.repositorio.AssignationRepository;
 import com.busqueda.proyecto.repositorio.DynamicRepository;
 import com.busqueda.proyecto.repositorio.OrganizationRepository;
 import com.busqueda.proyecto.repositorio.ProjectRepository;
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 	private ProjectRepository projectRepository;
 	
 	@Autowired
-	private AsignationRepository asignationRepository;
+	private AssignationRepository assignationRepository;
 	
 	@Autowired
 	private DynamicRepository dynamicRepository;
@@ -312,7 +312,7 @@ public class UserServiceImpl implements UserService {
 				throw new ProyectSearchException("No Scientist found with that id");
 			}
 			
-			scientist.setActive(false);
+			scientist.setActive(true);
 			scientistRepository.save(scientist);
 			reactivated = true;
 		} catch (Exception e) {
@@ -381,11 +381,11 @@ public class UserServiceImpl implements UserService {
 			project.setUpdateLife(ProjectUtils.getLocalDateTimeNow());
 			projectRepository.save(project);
 			
-			AsignationEntity asignation = new AsignationEntity();
+			AssignationEntity asignation = new AssignationEntity();
 			asignation.setIdProject(idProject);
 			asignation.setIdScientist(sc.getOrcid());
 			
-			asignationRepository.save(asignation);			
+			assignationRepository.save(asignation);			
 			
 			assigned = true;
 			log.debug("Leaving assignmentProcess [response]:{} ", assigned);
@@ -438,6 +438,22 @@ public class UserServiceImpl implements UserService {
 		
 		return responseCriteria;
 	}
-	
+
+	@Override
+	public ProjectEntity getProjectOfScientist(String orcid) {
+
+		List<ProjectEntity> project = new ArrayList<>();
+		try {
+			project = assignationRepository.findProjectsByIdScientist(orcid);
+						
+			if (project.isEmpty()){
+				throw new ProyectSearchException("Project no found");
+			}
+			return project.get(0);
+		} catch (Exception e) {
+			log.error("Error with getProjectOfScientist service ");
+			throw new ProyectSearchException("Error in repository response." + e);
+		}	
+	}	
 	
 }

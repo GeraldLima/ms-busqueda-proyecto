@@ -1,6 +1,5 @@
 package com.busqueda.proyecto.servicio.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +23,6 @@ import com.busqueda.proyecto.repositorio.ScientistRepository;
 import com.busqueda.proyecto.servicio.PublicationService;
 import com.busqueda.proyecto.setters.ServiceSetters;
 
-import dto.ProjectMetrics;
 import dto.ScientistMetrics;
 import lombok.extern.slf4j.Slf4j;
 

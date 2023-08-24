@@ -226,7 +226,7 @@ public class UserController {
 		return ResponseEntity.ok().body(responseDto);
 	}
 	
-	@GetMapping(value = "/cientifico/isAssigned/{orcid}",
+	@GetMapping(value = "/cientifico/assignment/{orcid}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Assign an available Scientist by an orcid to a not full Project", 
 			method = "GET")
@@ -249,4 +249,15 @@ public class UserController {
 		return ResponseEntity.ok().body(projectList);
 	}
 	
+	@GetMapping(value = "/cientifico/project/{orcid}",
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Find the Project which a Scientist is assigned", method = "GET")
+	public ResponseEntity<ProjectEntity> getProjectOfScientist(
+			@Parameter(description = "orcid of a Scientist to be assigned") 
+			@PathVariable (name="orcid") String orcid) {
+		
+		ProjectEntity proj = service.getProjectOfScientist(orcid);
+		
+		return ResponseEntity.ok().body(proj);
+	}
 }
