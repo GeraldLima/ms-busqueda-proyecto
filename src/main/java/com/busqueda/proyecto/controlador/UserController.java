@@ -260,4 +260,16 @@ public class UserController {
 		
 		return ResponseEntity.ok().body(proj);
 	}
+	
+	@GetMapping(value = "/cientifico/assignment/getOut/{orcid}",
+			produces = { MediaType.APPLICATION_JSON_VALUE })
+	@Operation(summary = "Remove a Scientist from an assigned-Project", 
+			method = "GET")
+	public ResponseEntity<Boolean> assignmentGeOut(
+			@Parameter(description = "orcid of a Scientist to be assigned") 
+			@PathVariable (name="orcid") String orcid, 
+			@RequestParam (required = true) Long idProject) {
+		
+		return ResponseEntity.ok().body(service.assignmentGetOut(idProject, orcid));
+	}
 }

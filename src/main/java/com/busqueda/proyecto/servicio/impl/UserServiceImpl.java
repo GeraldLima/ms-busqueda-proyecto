@@ -28,6 +28,7 @@ import com.busqueda.proyecto.servicio.UserService;
 import com.busqueda.proyecto.setters.ServiceSetters;
 import com.busqueda.proyecto.utils.ProjectUtils;
 
+import dto.GetAssignmentDTO;
 import dto.GetLoginDTO;
 import dto.ProjectMetrics;
 import lombok.extern.slf4j.Slf4j;
@@ -82,7 +83,10 @@ public class UserServiceImpl implements UserService {
 
 		ScientistEntity scientist = scientistRepository.findByOrcid(orcid);
 		
-		return scientist != null? scientist : null;
+		if (scientist == null) {
+			throw new ProyectSearchException("No Scientist found with that id: " + orcid);
+		}
+		return scientist;
 	}
 	
 	@Override
@@ -129,6 +133,7 @@ public class UserServiceImpl implements UserService {
 				throw new ProyectSearchException("No Scientist found with that id");
 			}
 			this.deleteAllPublicationsByScientist(orcid);
+			scientist.setAvailable(false);
 			scientist.setActive(false);
 			scientistRepository.save(scientist);
 			deleted = true;
@@ -166,9 +171,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public OrganizationEntity getOrganizationById(Long id) {
 
-		Optional<OrganizationEntity> organization = organizationRepository.findById(id);
+		Optional<OrganizationEntity> organization = Optional.of(organizationRepository.findById(id)
+				.orElseThrow());
 		
-		return organization != null? organization.get() : null;
+		return organization.get();
 	}
 	
 	@Override
@@ -176,7 +182,10 @@ public class UserServiceImpl implements UserService {
 
 		OrganizationEntity organization = organizationRepository.findByIdOrganization(idOrganization);
 		
-		return organization != null? organization : null;
+		if ( organization == null) {
+			throw new ProyectSearchException("No Organization found with that id: " + idOrganization);
+		}
+		return organization;
 	}
 	
 	@Override
@@ -357,33 +366,25 @@ public class UserServiceImpl implements UserService {
 		}
 		ProjectEntity project = proj.get();
 		Boolean assigned = false;
-		Integer capacity = project.getCapacity();
-		Integer size = project.getSize();
 		
-		if (size >= capacity || project.getFull()) {
-			throw new ProyectSearchException("The curent project is already full ");
-		}
+		this.checkAssignation(project);
 		try {
 			ScientistEntity sc = scientistRepository.findByOrcid(orcid);
 			
 			if (sc == null || !sc.getAvailable()) {
 				throw new ProyectSearchException("Scientist not found or avaible with that id: " + orcid);
 			}
-
-			sc.setAvailable(false);		
-			scientistRepository.save(sc);
 			
-			size +=1;
-			if (capacity == size) {
-				project.setFull(true);
-			}
-			project.setSize(size);
+			sc.setAvailable(false);		
+			scientistRepository.save(sc);			
+			
 			project.setUpdateLife(ProjectUtils.getLocalDateTimeNow());
 			projectRepository.save(project);
 			
 			AssignationEntity asignation = new AssignationEntity();
 			asignation.setIdProject(idProject);
 			asignation.setIdScientist(sc.getOrcid());
+			asignation.setActive(true);
 			
 			assignationRepository.save(asignation);			
 			
@@ -396,6 +397,22 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		return assigned;
+	}
+	
+	protected void checkAssignation(ProjectEntity project) {	
+		
+		Integer capacity = project.getCapacity();
+		Integer size = project.getSize();
+		
+		if (size >= capacity || project.getFull()) {
+			throw new ProyectSearchException("The curent project is already full ");
+		}
+		
+		size +=1;
+		if (capacity == size) {
+			project.setFull(true);
+		}
+		project.setSize(size);
 	}
 
 	@Override
@@ -442,18 +459,57 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ProjectEntity getProjectOfScientist(String orcid) {
 
-		List<ProjectEntity> project = new ArrayList<>();
+		List<ProjectEntity> projects = new ArrayList<>();
 		try {
-			project = assignationRepository.findProjectsByIdScientist(orcid);
+			projects = assignationRepository.findProjectsByIdScientist(orcid);
 						
-			if (project.isEmpty()){
-				throw new ProyectSearchException("Project no found");
+			if (projects.isEmpty()){
+				ProjectEntity emptyProject = new ProjectEntity();
+				emptyProject.setId(0L);
+				
+				return emptyProject;
 			}
-			return project.get(0);
+			return projects.get(0);
+			
 		} catch (Exception e) {
 			log.error("Error with getProjectOfScientist service ");
 			throw new ProyectSearchException("Error in repository response." + e);
-		}	
+		}		
+	}
+
+	@Override
+	public Boolean assignmentGetOut(Long idProject, String orcid) {
+
+		GetAssignmentDTO assignment = new GetAssignmentDTO();
+		
+		try {
+			assignment = assignationRepository.findAssignment(orcid, idProject);
+		
+			if (assignment == null) {
+				throw new ProyectSearchException("No register found");
+			}
+			
+			ScientistEntity sc = assignment.getScientist();		
+			sc.setAvailable(true);
+			
+			ProjectEntity proj = assignment.getProject();
+			Integer size = proj.getSize() - 1;
+			if (proj.getFull()) {
+				proj.setFull(false);
+			}
+			proj.setSize(size);
+			proj.setUpdateLife(ProjectUtils.getLocalDateTimeNow());		
+			
+			AssignationEntity assignation = assignment.getAssignation();
+			assignation.setActive(false);
+			assignationRepository.save(assignation);
+			
+			return true;
+		
+		} catch (Exception e) {
+			log.error("Error with assignmentGetOut service ");
+			throw new ProyectSearchException("Error in repository response." + e);
+		}
 	}	
 	
 }

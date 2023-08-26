@@ -57,6 +57,8 @@ public interface UserService {
 
 	ProjectEntity getProjectOfScientist(String orcid);
 
+	Boolean assignmentGetOut(Long idProject, String orcid);
+
 
 	
 }

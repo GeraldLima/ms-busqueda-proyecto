@@ -15,6 +15,7 @@ import com.busqueda.proyecto.entidad.ProjectEntity;
 import com.busqueda.proyecto.entidad.PublicationEntity;
 import com.busqueda.proyecto.entidad.ScientistEntity;
 import com.busqueda.proyecto.exception.ProyectSearchException;
+import com.busqueda.proyecto.repositorio.AssignationRepository;
 import com.busqueda.proyecto.repositorio.DynamicRepository;
 import com.busqueda.proyecto.repositorio.OrganizationRepository;
 import com.busqueda.proyecto.repositorio.ProjectRepository;
