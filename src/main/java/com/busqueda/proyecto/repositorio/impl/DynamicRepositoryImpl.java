@@ -77,17 +77,19 @@ public class DynamicRepositoryImpl implements DynamicRepository {
 		StringBuilder queryBuilder = new StringBuilder();
 		
 		queryBuilder.append("SELECT sc FROM ScientistEntity sc "
-//				+ "INNER JOIN PublicationEntity pub ON pub.idScientist = sc.orcid "
-				+ "WHERE sc.active = TRUE ");
+				+ "INNER JOIN PublicationEntity pub ON pub.idScientist = sc.orcid "
+				+ "WHERE sc.available = TRUE AND sc.active = TRUE ");
 		
 		if (metrics.getScope() != null && 
 				StringUtils.isNotBlank(metrics.getScope())) {
-			queryBuilder.append("AND (UPPER(sc.profession) LIKE CONCAT('%', UPPER(:scope), '%')) ");
+			queryBuilder.append("AND (UPPER(sc.profession) LIKE CONCAT('%', UPPER(:scope), '%')) "
+					+ " OR (UPPER(pub.expertise) LIKE CONCAT('%', UPPER(:scope), '%'))");
 		}
 		
 		if (metrics.getScope() != null && 
 				StringUtils.isNotBlank(metrics.getScope())) {
-			queryBuilder.append("OR (UPPER(sc.profession) LIKE CONCAT('%', UPPER(:subscope), '%')) ");
+			queryBuilder.append("OR (UPPER(sc.profession) LIKE CONCAT('%', UPPER(:subscope), '%')) "
+					+ " OR (UPPER(pub.expertise) LIKE CONCAT('%', UPPER(:subscope), '%'))");
 		}
 		
 		TypedQuery<ScientistEntity> query = entityManager.
