@@ -33,7 +33,7 @@ public class DynamicRepositoryImpl implements DynamicRepository {
 		
 		StringBuilder queryBuilder = new StringBuilder();
 		
-		queryBuilder.append("SELECT proj FROM ProjectEntity proj "
+		queryBuilder.append("SELECT DISTINCT proj FROM ProjectEntity proj "
 				+ "WHERE proj.active = TRUE AND proj.full = FALSE ");
 		
 		if (metrics.getProfession() != null && 
@@ -76,7 +76,7 @@ public class DynamicRepositoryImpl implements DynamicRepository {
 		
 		StringBuilder queryBuilder = new StringBuilder();
 		
-		queryBuilder.append("SELECT sc FROM ScientistEntity sc "
+		queryBuilder.append("SELECT DISTINCT sc FROM ScientistEntity sc "
 				+ "INNER JOIN PublicationEntity pub ON pub.idScientist = sc.orcid "
 				+ "WHERE sc.available = TRUE AND sc.active = TRUE ");
 		
