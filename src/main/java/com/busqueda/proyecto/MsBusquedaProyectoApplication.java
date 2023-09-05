@@ -11,9 +11,9 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 
 @SpringBootApplication
-@OpenAPIDefinition(info = @Info(title = "Project API", 
-							version = "1.6", 
-							description = "SCIENTIST, ORGANIZATION AND USER INFO"))
+@OpenAPIDefinition(info = @Info(title = "Project ScienceHub API", 
+							version = "2.0.5", 
+							description = "SCIENTIST, ORGANIZATION AND USER FUNCTIONALITIES"))
 public class MsBusquedaProyectoApplication {
 
 	public static void main(String[] args) {

@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController(value = "User-Controller")
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("api/searchProject")
+@RequestMapping("searchProject")
 public class UserController {
 
 	@Autowired

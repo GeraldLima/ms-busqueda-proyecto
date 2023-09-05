@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController(value = "Publicaction-Controller")
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("api/searchProject")
+@RequestMapping("searchProject")
 public class PublicationController {
 
 	@Autowired
