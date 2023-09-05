@@ -11,7 +11,7 @@
 	
 	<groupId>com.busqueda.proyecto</groupId>
 	<artifactId>proyecto</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>2.0.5-SNAPSHOT</version>
 	<name>ms-busqueda-proyecto</name>
 	<description>Búsqueda de grupo para Proyecto Microservice</description>
 	
@@ -26,9 +26,10 @@
 		<postgresql.version>42.2.12.jre7</postgresql.version>
         <lombok.version>1.18.20</lombok.version>
         <commons-lang3.version>3.11</commons-lang3.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
         <httpclient.version>4.5</httpclient.version>
-        <springfox-swagger.version>2.9.2</springfox-swagger.version>
-        <swagger.annotations.version>1.6.3</swagger.annotations.version>
+        <springdoc.openapi.version>1.6.9</springdoc.openapi.version>
+                
         <jackson.version>2.11.2</jackson.version>
 	</properties>
 	
@@ -87,30 +88,25 @@
            <groupId>org.apache.commons</groupId>
            <artifactId>commons-lang3</artifactId>
            <version>${commons-lang3.version}</version>
-       </dependency>            
+       </dependency>
+       <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-collections4</artifactId>
+		    <version>${commons-collections4.version}</version>
+		</dependency>
+		          
        <dependency>
            <groupId>org.apache.httpcomponents</groupId>
            <artifactId>httpclient</artifactId>
            <version>${httpclient.version}</version>
-       </dependency>
-       
-       <!-- Swagger -->
-       <dependency>
-           <groupId>io.springfox</groupId>
-           <artifactId>springfox-swagger2</artifactId>
-           <version>${springfox-swagger.version}</version>
-       </dependency>
-       <dependency>
-           <groupId>io.springfox</groupId>
-           <artifactId>springfox-swagger-ui</artifactId>
-           <version>${springfox-swagger.version}</version>
-       </dependency>
-       <dependency>
-           <groupId>io.swagger</groupId>
-           <artifactId>swagger-annotations</artifactId>
-           <version>${swagger.annotations.version}</version>
-           <scope>compile</scope>
-       </dependency>
+       </dependency>       
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${springdoc.openapi.version}</version>
+		</dependency>
        
        <!-- jackson-databind -->
        <dependency>

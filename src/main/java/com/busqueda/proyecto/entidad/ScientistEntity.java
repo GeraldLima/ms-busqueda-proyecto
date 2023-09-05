@@ -30,14 +30,20 @@ public class ScientistEntity implements Serializable {
 	@Column(name="ORCID")
 	private String orcid;
 	
+	@Column(name="UID_USUARIO")
+	private String userUuid;
+	
 	@Column(name="NOMBRE")
 	private String name;
 	
 	@Column(name="EMAIL")
 	private String email;
 	
-	@Column(name="ESPECIALIDAD")
-	private String speciality;
+	@Column(name="PROFESION")
+	private String profession;
+	
+	@Column(name="DISPONIBLE")
+	private Boolean available;
 	
 	@Column(name="ACTIVO")
 	private Boolean active;

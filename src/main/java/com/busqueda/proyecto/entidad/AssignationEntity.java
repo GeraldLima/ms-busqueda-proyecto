@@ -17,33 +17,24 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="ORGANISMO", schema="busqueda")
-public class OrganizationEntity implements Serializable {
+@Table(name="ASIGNACION", schema="busqueda")
+public class AssignationEntity implements Serializable {
 
-	private static final long serialVersionUID = -8351928181537467051L;
+	private static final long serialVersionUID = -2573139114013513407L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
-	@Column(name="ID")
+	@Column(name="ID_ASIGNACION")
 	private Long id;
 	
-	@Column(name="ID_ORGANISMO")
-	private String idOrganization;
+	@Column(name="ID_CIENTIFICO")
+	private String idScientist;
 	
-	@Column(name="UID_USUARIO")
-	private String userUuid;
+	@Column(name="ID_PROYECTO")
+	private Long idProject;
 	
-	@Column(name="NOMBRE")
-	private String name;
-	
-	@Column(name="EMAIL")
-	private String email;
-	
-	@Column(name="LOCALIDAD")
-	private String location;
-	
-	@Column(name="AMBITO")
-	private String area;
+	@Column(name="DESCRIPCION")
+	private String description;
 	
 	@Column(name="ACTIVO")
 	private Boolean active;

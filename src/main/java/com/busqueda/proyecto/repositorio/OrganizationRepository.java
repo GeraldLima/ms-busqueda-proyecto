@@ -1,5 +1,8 @@
 package com.busqueda.proyecto.repositorio;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,6 +13,28 @@ import com.busqueda.proyecto.entidad.OrganizationEntity;
 @Repository
 public interface OrganizationRepository extends JpaRepository<OrganizationEntity, Long> {
 
-	@Query("SELECT org FROM OrganizationEntity org WHERE org.idOrganization = :id ")
+	@Query("SELECT org FROM OrganizationEntity org WHERE org.id = :id "
+			+ "AND org.active = TRUE ")
+	Optional<OrganizationEntity> findById(@Param("id") Long id);
+	
+	@Query("SELECT org FROM OrganizationEntity org WHERE org.idOrganization = :id "
+			+ "AND org.active = TRUE ")
 	OrganizationEntity findByIdOrganization(@Param("id") String id);
+
+	@Query("SELECT org FROM OrganizationEntity org "
+			+ "WHERE org.userUuid = :idUser AND org.active = TRUE ")
+	OrganizationEntity findByUuid(@Param("idUser") String idUser);
+	
+	@Query("SELECT org FROM OrganizationEntity org "
+			+ "WHERE UPPER(org.name) LIKE CONCAT('%', UPPER(:nameOrg), '%') "
+			+ "AND org.active = TRUE ")
+	List<OrganizationEntity> findOrganizationsByName(@Param("nameOrg") String nameOrg);
+
+	@Query("SELECT CASE WHEN COUNT (org) > 0 THEN false ELSE true END FROM OrganizationEntity org "
+			+ "WHERE org.idOrganization = :idOrganizationIn AND org.active = TRUE ")
+	Boolean existsByIdOrganization(@Param("idOrganizationIn") String idOrganizationIn);
+	
+	@Query("SELECT org FROM OrganizationEntity org WHERE org.idOrganization = :id "
+			+ "AND org.active = FALSE ")
+	OrganizationEntity findDeactivatedOrganization(@Param("id") String id);
 }
