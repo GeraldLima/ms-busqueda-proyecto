@@ -25,15 +25,15 @@ import com.busqueda.proyecto.servicio.PublicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
-@RestController
+@RestController(value = "Publicaction-Controller")
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("api/project")
+@RequestMapping("api/searchProject")
 public class PublicationController {
 
 	@Autowired
 	private PublicationService service;
 	
-	@GetMapping(value = "/publicacion/{id}",
+	@GetMapping(value = "/publication/{id}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find a Publication by its id", method = "GET")
 	public ResponseEntity<PublicationEntity> getPublicationById(
@@ -44,7 +44,7 @@ public class PublicationController {
 		return ResponseEntity.ok().body(publication);
 	}	
 	
-	@PostMapping(value = "/publicacion", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+	@PostMapping(value = "/publication", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Insert a new Publication with a body request", method = "POST")
 	public ResponseEntity<Long> postPublication(
@@ -54,7 +54,7 @@ public class PublicationController {
 		return ResponseEntity.ok().body(idPublication);
 	}
 	
-	@PutMapping(value = "/publicacion/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+	@PutMapping(value = "/publication/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Update a Publication by its id and a body request", method = "PUT")
 	public ResponseEntity<PublicationEntity> putPublication(
@@ -65,7 +65,7 @@ public class PublicationController {
 		return ResponseEntity.ok().body(publication);
 	}
 
-	@GetMapping(value = "/publicacion/all/{idCientifico}", 
+	@GetMapping(value = "/publication/all/{idCientifico}", 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find all Publications by idScientist", method = "GET")
 	public ResponseEntity<List<PublicationEntity>> getPublications(
@@ -75,7 +75,7 @@ public class PublicationController {
 		return ResponseEntity.ok().body(service.getPublications(idScientist));
 	}
 	
-	@GetMapping(value = "/publicacion/all", 
+	@GetMapping(value = "/publication/all", 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find all Publications", method = "GET")
 	public ResponseEntity<Page<PublicationEntity>> getAllPublications(
@@ -85,7 +85,7 @@ public class PublicationController {
 		return ResponseEntity.ok().body(service.getAllPublications(page, size));
 	}
 
-	@DeleteMapping(value = "/publicacion/{id}")
+	@DeleteMapping(value = "/publication/{id}")
 	@Operation(summary = "Delete a Publication by its id", method = "DELETE")
 	public ResponseEntity<Boolean> deletePublication(
 			@Parameter(description = "id of a Publication to be deleted") 
@@ -94,7 +94,7 @@ public class PublicationController {
 		return ResponseEntity.ok().body(service.deletePublication(id));
 	}
 	
-	@GetMapping(value = "/publicacion/reactivate/{idPublication}")
+	@GetMapping(value = "/publication/reactivate/{idPublication}")
 	@Operation(summary = "Reactivate a Publication by its id", method = "GET")
 	public ResponseEntity<Boolean> reactivatePublication(
 			@Parameter(description = "Id of a Publication to be reactivated") 
@@ -103,7 +103,7 @@ public class PublicationController {
 		return ResponseEntity.ok().body(service.reactivatePublication(idPublication));
 	}
 	
-	@GetMapping(value = "/proyecto/{id}",
+	@GetMapping(value = "/project/{id}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find a Project by its id", method = "GET")
 	public ResponseEntity<ProjectEntity> getProjectById(
@@ -114,7 +114,7 @@ public class PublicationController {
 		return ResponseEntity.ok().body(project);
 	}	
 	
-	@PostMapping(value = "/proyecto", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+	@PostMapping(value = "/project", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Insert a new Project with a body request", method = "POST")
 	public ResponseEntity<Long> postProject(
@@ -124,7 +124,7 @@ public class PublicationController {
 		return ResponseEntity.ok().body(idProject);
 	}
 	
-	@PutMapping(value = "/proyecto/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+	@PutMapping(value = "/project/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Update a Project by its id and a body request", method = "PUT")
 	public ResponseEntity<ProjectEntity> putProject(
@@ -136,7 +136,7 @@ public class PublicationController {
 		return ResponseEntity.ok().body(project);
 	}
 
-	@GetMapping(value = "/proyecto/all/{idOrganismo}", 
+	@GetMapping(value = "/project/all/{idOrganismo}", 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find all Projects by idOrganization", method = "GET")
 	public ResponseEntity<List<ProjectEntity>> getProjects(
@@ -146,7 +146,7 @@ public class PublicationController {
 		return ResponseEntity.ok().body(service.getProjects(idOrganization));
 	}
 	
-	@GetMapping(value = "/proyecto/all", 
+	@GetMapping(value = "/project/all", 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find all Projects", method = "GET")
 	public ResponseEntity<Page<ProjectEntity>> getAllProjects(
@@ -156,7 +156,7 @@ public class PublicationController {
 		return ResponseEntity.ok().body(service.getAllProjects(page, size));
 	}
 
-	@DeleteMapping(value = "/proyecto/{id}")
+	@DeleteMapping(value = "/project/{id}")
 	@Operation(summary = "Delete a Project by its id", method = "DELETE")
 	public ResponseEntity<Boolean> deleteProject(
 			@Parameter(description = "id of a Project to be deleted") 
@@ -165,7 +165,7 @@ public class PublicationController {
 		return ResponseEntity.ok().body(service.deleteProject(id));
 	}
 	
-	@GetMapping(value = "/proyecto/reactivate/{idProject}")
+	@GetMapping(value = "/project/reactivate/{idProject}")
 	@Operation(summary = "Reactivate a Project by its id", method = "GET")
 	public ResponseEntity<Boolean> reactivateProject(
 			@Parameter(description = "Id of a Project to be reactivated") 
@@ -174,7 +174,7 @@ public class PublicationController {
 		return ResponseEntity.ok().body(service.reactivateProject(idProject));
 	}
 	
-	@GetMapping(value = "/proyecto/recommendation/{idProject}",
+	@GetMapping(value = "/project/recommendation/{idProject}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find a list of Scientists recommended by the application", method = "GET")
 	public ResponseEntity<Page<ScientistEntity>> getRecomendedScientists(

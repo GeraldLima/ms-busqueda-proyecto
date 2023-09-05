@@ -27,15 +27,15 @@ import dto.GetLoginDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
-@RestController
+@RestController(value = "User-Controller")
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("api/project")
+@RequestMapping("api/searchProject")
 public class UserController {
 
 	@Autowired
 	private UserService service;
 	
-	@GetMapping(value = "/cientifico/findBy/{orcid}",
+	@GetMapping(value = "/scientist/findBy/{orcid}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find a Scientist by its id", method = "GET")
 	public ResponseEntity<ScientistEntity> getScientistByOrcid(
@@ -46,7 +46,7 @@ public class UserController {
 		return ResponseEntity.ok().body(scientist);
 	}
 	
-	@GetMapping(value = "/cientifico/{id}",
+	@GetMapping(value = "/scientist/{id}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find a Scientist by its id", method = "GET")
 	public ResponseEntity<ScientistEntity> getScientistById(
@@ -57,7 +57,7 @@ public class UserController {
 		return ResponseEntity.ok().body(scientist);
 	}	
 	
-	@PostMapping(value = "/cientifico", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+	@PostMapping(value = "/scientist", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Insert a new Scientist with a body request", method = "POST")
 	public ResponseEntity<Long> postScientist(
@@ -67,7 +67,7 @@ public class UserController {
 		return ResponseEntity.ok().body(idScientist);
 	}
 	
-	@PutMapping(value = "/cientifico/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+	@PutMapping(value = "/scientist/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Update a Scientist by its id and a body request", method = "PUT")
 	public ResponseEntity<ScientistEntity> putScientist(
@@ -78,7 +78,7 @@ public class UserController {
 		return ResponseEntity.ok().body(scientist);
 	}
 
-	@GetMapping(value = "/cientifico/all", 
+	@GetMapping(value = "/scientist/all", 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find all Scientists", method = "GET")
 	public ResponseEntity<List<ScientistEntity>> getScientists() {
@@ -86,7 +86,7 @@ public class UserController {
 		return ResponseEntity.ok().body(service.getScientists());
 	}
 
-	@DeleteMapping(value = "/cientifico/{orcid}")
+	@DeleteMapping(value = "/scientist/{orcid}")
 	@Operation(summary = "Delete a Scientist by its id", method = "DELETE")
 	public ResponseEntity<Boolean> deleteScientist(
 			@Parameter(description = "orcid of a Scientist to be deleted") 
@@ -95,7 +95,7 @@ public class UserController {
 		return ResponseEntity.ok().body(service.deleteScientist(orcid));
 	}
 	
-	@GetMapping(value = "/cientifico/isExists/{orcid}",
+	@GetMapping(value = "/scientist/isExists/{orcid}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find out if a Scientist exists by its id", method = "GET")
 	public ResponseEntity<Boolean> getScientistIsExistsByOrcid(
@@ -105,7 +105,7 @@ public class UserController {
 		return ResponseEntity.ok().body(service.getScientistIsExistsByOrcid(orcid));
 	}
 	
-	@GetMapping(value = "/cientifico/reactivate/{idScientist}")
+	@GetMapping(value = "/scientist/reactivate/{idScientist}")
 	@Operation(summary = "Reactivate an Scientist by its id", method = "GET")
 	public ResponseEntity<Boolean> reactivateScientist(
 			@Parameter(description = "Id of a Scientist to be reactivated") 
@@ -114,7 +114,7 @@ public class UserController {
 		return ResponseEntity.ok().body(service.reactivateScientist(idScientist));
 	}
 	
-	@GetMapping(value = "/organismo/{id}", 
+	@GetMapping(value = "/organization/{id}", 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find an Organization by its id", method = "GET")
 	public ResponseEntity<OrganizationEntity> getOrganizationById(
@@ -125,7 +125,7 @@ public class UserController {
 		return ResponseEntity.ok().body(organization);
 	}
 	
-	@GetMapping(value = "/organismo/findBy/{idOrganization}", 
+	@GetMapping(value = "/organization/findBy/{idOrganization}", 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find an Organization by idOrganization", method = "GET")
 	public ResponseEntity<OrganizationEntity> getOrganizationById(
@@ -136,7 +136,7 @@ public class UserController {
 		return ResponseEntity.ok().body(organization);
 	}
 
-	@PostMapping(value = "/organismo", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+	@PostMapping(value = "/organization", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Insert a new Organization with a body request", method = "POST")
 	public ResponseEntity<Long> postOrganization(
@@ -146,7 +146,7 @@ public class UserController {
 		return ResponseEntity.ok().body(idOrganization);
 	}
 	
-	@PutMapping(value = "/organismo/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+	@PutMapping(value = "/organization/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Update a Organization by its id and a body request", method = "PUT")
 	public ResponseEntity<OrganizationEntity> putOrganization(
@@ -158,7 +158,7 @@ public class UserController {
 		return ResponseEntity.ok().body(organization);
 	}
 
-	@GetMapping(value = "/organismo/all", 
+	@GetMapping(value = "/organization/all", 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find all Organizations", method = "GET")
 	public ResponseEntity<List<OrganizationEntity>> getOrganizations() {
@@ -166,7 +166,7 @@ public class UserController {
 		return ResponseEntity.ok().body(service.getOrganizations());
 	}
 	
-	@GetMapping(value = "/organismo/findByName/{nameOrg}",
+	@GetMapping(value = "/organization/findByName/{nameOrg}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find Organizations by name", method = "GET")
 	public ResponseEntity<List<OrganizationEntity>> getOrganizationsByName(
@@ -177,7 +177,7 @@ public class UserController {
 		return ResponseEntity.ok().body(listOrgs);
 	}
 
-	@DeleteMapping(value = "/organismo/{idOrganization}")
+	@DeleteMapping(value = "/organization/{idOrganization}")
 	@Operation(summary = "Delete an Organization by its id", method = "DELETE")
 	public ResponseEntity<Boolean> deleteOrganization(
 			@Parameter(description = "Id of an Organization to be deleted") 
@@ -186,7 +186,7 @@ public class UserController {
 		return ResponseEntity.ok().body(service.deleteOrganization(idOrganization));
 	}
 	
-	@GetMapping(value = "/organismo/isExists/{idOrganization}",
+	@GetMapping(value = "/organization/isExists/{idOrganization}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find out if an Organization exists by its id", method = "GET")
 	public ResponseEntity<Boolean> getOrganizationIsExistsById(
@@ -196,7 +196,7 @@ public class UserController {
 		return ResponseEntity.ok().body(service.getOrganizationIsExistsById(idOrganization));
 	}
 	
-	@GetMapping(value = "/organismo/reactivate/{idOrganization}")
+	@GetMapping(value = "/organization/reactivate/{idOrganization}")
 	@Operation(summary = "Reactivate an Organization by its id", method = "GET")
 	public ResponseEntity<Boolean> reactivateOrganization(
 			@Parameter(description = "Id of an Organization to be reactivated") 
@@ -205,7 +205,7 @@ public class UserController {
 		return ResponseEntity.ok().body(service.reactivateOrganization(idOrganization));
 	}
 	
-	@PostMapping(value = "/usuario", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
+	@PostMapping(value = "/user", consumes = { MediaType.APPLICATION_JSON_VALUE }, 
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Insert a new SearchUser with a body request", method = "POST")
 	public ResponseEntity<Long> postUser(
@@ -227,7 +227,7 @@ public class UserController {
 		return ResponseEntity.ok().body(responseDto);
 	}
 	
-	@GetMapping(value = "/cientifico/assignment/{orcid}",
+	@GetMapping(value = "/scientist/assignment/{orcid}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Assign an available Scientist by an orcid to a not full Project", 
 			method = "GET")
@@ -239,7 +239,7 @@ public class UserController {
 		return ResponseEntity.ok().body(service.assignmentProcess(idProject, orcid));
 	}
 	
-	@GetMapping(value = "/cientifico/recommendation/{orcid}",
+	@GetMapping(value = "/scientist/recommendation/{orcid}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find a list of Projets recommended by the application", method = "GET")
 	public ResponseEntity<Page<ProjectEntity>> getRecomendedProjects(
@@ -250,7 +250,7 @@ public class UserController {
 		return ResponseEntity.ok().body(projectList);
 	}
 	
-	@GetMapping(value = "/cientifico/project/{orcid}",
+	@GetMapping(value = "/scientist/project/{orcid}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Find the Project which a Scientist is assigned", method = "GET")
 	public ResponseEntity<ProjectEntity> getProjectOfScientist(
@@ -262,7 +262,7 @@ public class UserController {
 		return ResponseEntity.ok().body(proj);
 	}
 	
-	@GetMapping(value = "/cientifico/assignment/getOut/{orcid}",
+	@GetMapping(value = "/scientist/assignment/getOut/{orcid}",
 			produces = { MediaType.APPLICATION_JSON_VALUE })
 	@Operation(summary = "Remove a Scientist from an assigned-Project", 
 			method = "GET")
